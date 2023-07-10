@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from plotly import express as px
 from plotly.subplots import make_subplots
 import pandas as pd
@@ -26,7 +24,7 @@ def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
     )
 
 
-class scatter_with_size():
+class Plot_bubble_chart():
     def __init__(self, df, x, y, color=None, facet_col=None, facet_row=None, rounded=None, decimals=None, normalize=False, smoothing=False, offset=0, **kwargs):
         self.df = df.copy()
         self.x = x
@@ -111,8 +109,7 @@ class scatter_with_size():
         return self.plot
 
 
-def plotly_line(df: pd.DataFrame, x, y, secondary_y, xtitle=None, ytitle=None, secondary_ytitle=None, save_html_path=None, vspan=None,
-                vspan_color_randomize=False, sort_column=True, sort_x=True, opacity=0.2, px_kwargs=dict(), **kwargs):
+def Plot_line(df: pd.DataFrame, x, y, secondary_y, xtitle=None, ytitle=None, secondary_ytitle=None, save_html_path=None, vspan=None, vspan_color_randomize=False, sort_column=True, sort_x=True, opacity=0.2, px_kwargs=dict(), **kwargs):
     """Make line graph with secondary y using plotly.express
 
     Parameters
@@ -215,7 +212,7 @@ def plotly_line(df: pd.DataFrame, x, y, secondary_y, xtitle=None, ytitle=None, s
     return subfig
 
 
-def bubble_chart_with_line(bubble_plot, line_info: dict, x1, x2, xtitle=None, ytitle=None, **kwargs):
+def Plot_bubble_chart_with_line(bubble_plot, line_info: dict, x1, x2, xtitle=None, ytitle=None, **kwargs):
     """Making bubble chart with linear plot
 
     Parameters

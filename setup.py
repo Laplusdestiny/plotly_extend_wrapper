@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Author: Laplusdestiny <prayonshootingstars@gmail.com>
 # Copyright (c) 2023-2023 Laplusdestiny
 # License: MIT
