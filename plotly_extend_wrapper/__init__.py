@@ -1,5 +1,5 @@
 from plotly_extend_wrapper.wrapper import *
-from plotly_extend_wrapper.updater import Update_plotly_object
-from plotly_extend_wrapper.common import check_directory
+from plotly_extend_wrapper.updater import *
+from plotly_extend_wrapper.common import *
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"

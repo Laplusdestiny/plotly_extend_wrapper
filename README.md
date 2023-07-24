@@ -12,6 +12,7 @@ You can make plot simply
 - pandas >= 1.1.5
 
 ## Graph
+
 - Pie(wrapper.Plot_pie)
 - Sunburst(wrapper.Plot_sunburst)
 - Bubble(wrapper.Plot_bubble)
@@ -19,6 +20,7 @@ You can make plot simply
 - Bubble with linear line(wrapper.Plot_bubble_with_line)
 
 ## Common function
+
 - Updater
   - Add options
   - Available options
@@ -29,4 +31,3 @@ You can make plot simply
     - height
     - width
     - marker size
-

@@ -5,6 +5,20 @@ from plotly_extend_wrapper.common import check_directory
 
 
 def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
+    """Make pie plot
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        pandas.DataFrame included data to make pie chart
+    target : str
+        String which column you would like to use for pie chart
+
+    Returns
+    -------
+    plotly.graph_objects
+        Object of pie chart
+    """
     vc = data[target].value_counts().reset_index(name="count")
     return px.pie(
         vc,
@@ -15,6 +29,21 @@ def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
 
 
 def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
+    """Make sunburst plot
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        pandas.DataFrame included data to make sunburst chart
+    groups : list
+        Strings list of group
+        Changed when you replace the order
+
+    Returns
+    -------
+    plotly.graph_objects
+        Object of sunburst chart
+    """
     vc = data.value_counts(subset=groups).reset_index(name="count")
     return px.sunburst(
         vc,
@@ -25,7 +54,36 @@ def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
 
 
 class Plot_bubble_chart():
+    """Make bubble chart
+    """
     def __init__(self, df, x, y, color=None, facet_col=None, facet_row=None, rounded=None, decimals=None, normalize=False, smoothing=False, offset=0, **kwargs):
+        """Initialize function
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            pandas.DataFrame included data to make plot
+        x : str
+            X-axis column's name
+        y : str
+            Y-axis column's name
+        color : str, optional
+            Column name you want colorize with data, by default None
+        facet_col : str, optional
+            Column name you want plot separeted vertically, by default None
+        facet_row : str, optional
+            Column name you want plot separeted horizontally, by default None
+        rounded : list, optional
+            Columns list which columns you want to round data, by default None
+        decimals : list, optional
+            Decimals list what level you want to round for each columns, by default None
+        normalize : bool, optional
+            If True, bubble size is calculated as normalized, by default False
+        smoothing : bool, optional
+            If True, bubble size were smoothed between each plot, by default False
+        offset : int, optional
+            Offset value for bubble size, by default 0
+        """
         self.df = df.copy()
         self.x = x
         self.y = y
@@ -109,7 +167,23 @@ class Plot_bubble_chart():
         return self.plot
 
 
-def Plot_line(df: pd.DataFrame, x, y, secondary_y, xtitle=None, ytitle=None, secondary_ytitle=None, save_html_path=None, vspan=None, vspan_color_randomize=False, sort_column=True, sort_x=True, opacity=0.2, px_kwargs=dict(), **kwargs):
+def Plot_line(
+        df: pd.DataFrame,
+        x: str,
+        y: list,
+        secondary_y: list,
+        xtitle=None,
+        ytitle=None,
+        secondary_ytitle=None,
+        save_html_path=None,
+        vspan=None,
+        vspan_color_randomize=False,
+        sort_column=True,
+        sort_x=True,
+        opacity=0.2,
+        px_kwargs=dict(),
+        **kwargs
+    ):
     """Make line graph with secondary y using plotly.express
 
     Parameters
