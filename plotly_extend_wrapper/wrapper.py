@@ -22,7 +22,7 @@ def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
     vc = data[target].value_counts().reset_index(name="count")
     return px.pie(
         vc,
-        names="index",
+        names=target,
         values="count",
         **kwargs
     )

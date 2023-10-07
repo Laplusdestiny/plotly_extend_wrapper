@@ -15,7 +15,7 @@ You can make plot simply
 
 - Pie(wrapper.Plot_pie)
 - Sunburst(wrapper.Plot_sunburst)
-- Bubble(wrapper.Plot_bubble)
+- Bubble(wrapper.Plot_bubble_chart)
 - Line with secondary y-axis(wrapper.Plot_line)
 - Bubble with linear line(wrapper.Plot_bubble_with_line)
 
