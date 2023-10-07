@@ -30,6 +30,7 @@ CLASSIFIERS = [
 
 with open("README.md", "r") as fp:
     readme = fp.read()
+LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 
 setup(
     name=NAME,
@@ -40,6 +41,7 @@ setup(
     description=DESCRIPTION,
     # README=readme,
     long_description=readme,
+    long_description_content_type=LONG_DESCRIPTION_CONTENT_TYPE,
     license=LICENSE,
     url=URL,
     version=VERSION,
