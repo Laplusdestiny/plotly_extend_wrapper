@@ -1,9 +1,11 @@
 name: Release package to pypi
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
+  release:
+    types: [created]
 
 jobs:
   deploy:
