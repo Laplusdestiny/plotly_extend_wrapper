@@ -3,7 +3,7 @@ name: Release package to pypi
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -26,7 +26,8 @@ jobs:
         poetry install --no-interaction
     - name: Build
       run: |
-        python3 setup.py sdist --formats=zip
+        poetry run python setup.py sdist
+        poetry run python setup.py bdist_wheel
     - name: Publish a Python distribution to PyPI
       if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
       uses: pypa/gh-action-pypi-publish@master
