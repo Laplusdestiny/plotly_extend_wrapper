@@ -21,11 +21,8 @@ jobs:
     - name: Poetry Version
       run: |
         poetry --version
-        pwd
-        ls -rot
     - name: Poetry Install Dependencies
       run: |
-        cd ../
         poetry install --no-interaction
     - name: Build
       run: |
