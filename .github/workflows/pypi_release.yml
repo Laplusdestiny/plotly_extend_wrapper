@@ -23,6 +23,7 @@ jobs:
         poetry --version
     - name: Poetry Install Dependencies
       run: |
+        cd ../
         poetry install --no-interaction
     - name: Build
       run: |
