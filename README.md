@@ -21,7 +21,7 @@ You can make plot simply
 
 ## Common function
 
-- Updater
+- updater
   - Add options
   - Available options
     - x-axis title
@@ -31,3 +31,7 @@ You can make plot simply
     - height
     - width
     - marker size
+- common
+  - check_directory
+    - Check directory with pathlib
+    - Make directory if parent directory doesn't exist
