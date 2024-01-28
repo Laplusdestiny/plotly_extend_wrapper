@@ -8,11 +8,11 @@ class Update_plotly_object:
 
     def _update_xaxis(self, title):
         if title is not None:
-            self.po.layout.xaxis.title.text = title
+            self.po.update_xaxes(title_text=title)
 
     def _update_yaxis(self, title):
         if title is not None:
-            self.po.layout.yaxis.title.text = title
+            self.po.update_yaxes(title_text=title)
 
     def _update_secondary_yaxis(self, title):
         if title is not None:
@@ -38,7 +38,17 @@ class Update_plotly_object:
         if marker_size is not None:
             self.po.update_traces(marker={"size": marker_size})
 
-    def update(self, xaxis_title=None, yaxis_title=None, secondary_yaxis_title=None, legend=None, legend_position=None, height=None, width=None, marker_size=None):
+    def update(
+        self,
+        xaxis_title=None,
+        yaxis_title=None,
+        secondary_yaxis_title=None,
+        legend=None,
+        legend_position=None,
+        height=None,
+        width=None,
+        marker_size=None,
+    ):
         """Update all options
 
         Parameters

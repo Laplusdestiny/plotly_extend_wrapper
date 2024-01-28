@@ -16,6 +16,7 @@ twine = "*"
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
+scikit-learn = "*"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"

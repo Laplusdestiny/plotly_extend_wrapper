@@ -2,8 +2,8 @@
 
 from plotly_extend_wrapper.wrapper import Plot_line
 from plotly_extend_wrapper.updater import Update_plotly_object
-from plotly import graph_objects as go
 import pandas as pd
+from pathlib import Path
 
 
 def MakeTimeSeriesData():
@@ -31,7 +31,22 @@ def CheckTitle(plot, axis, expected):
         assert plot.layout.yaxis2.title.text == expected
 
 
-def testAxisTitle():
+def CheckGraphSize(plot, axis, expected):
+    if axis == "width":
+        assert plot.layout.width == expected
+    elif axis == "height":
+        assert plot.layout.height == expected
+
+
+def CheckLegend(plot, expected):
+    assert plot.layout.showlegend == expected
+
+
+def CheckMarkerSize(plot, expected):
+    assert plot.data[0].marker.size == expected
+
+
+def test_AxisTitle():
     plot = MakeTimeSeriesData()
     updater = Update_plotly_object(plot)
     updater.update(
@@ -45,3 +60,39 @@ def testAxisTitle():
     CheckTitle(new_plot, "x", "new xTitle")
     CheckTitle(new_plot, "y", "new yTitle")
     CheckTitle(new_plot, "secondary_y", "new secondary yTitle")
+
+
+def test_GraphSize():
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    updater.update(height=1000, width=1200)
+    new_plot = updater()
+
+    CheckGraphSize(new_plot, "width", 1200)
+    CheckGraphSize(new_plot, "height", 1000)
+
+
+def test_ShowLegend():
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    updater.update(legend=False)
+    new_plot = updater()
+
+    CheckLegend(new_plot, False)
+
+
+def test_WriteImage():
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    output = Path("test.png")
+    updater.write_image(output)
+    assert output.is_file()
+
+
+def test_MarkerSize():
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    updater.update(marker_size=50)
+    new_plot = updater()
+
+    CheckMarkerSize(new_plot, 50)
