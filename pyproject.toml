@@ -6,7 +6,7 @@ authors = ["Toru Sumi <prayonshootingstars@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9"
 plotly = "*"
 kaleido = "0.2.1"
 pandas = "*"
@@ -16,8 +16,6 @@ twine = "*"
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
-scikit-learn = "*"
-
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"

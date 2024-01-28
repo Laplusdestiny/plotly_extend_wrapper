@@ -7,10 +7,13 @@ on:
       - unit-test
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+  Setup-python:
+    runs-on: ubuntu-latest
+    steps:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -25,9 +28,15 @@ jobs:
     - name: Poetry Install Dependencies
       run: |
         poetry install --no-interaction
+  Unit-test:
+    runs-on: ubuntu-latest
+    steps:
     - name: Test
       run: |
         poetry run pytest test --cov=./plotly_extend_wrapper --cov-report=xml
+  Upload-results:
+    runs-on: ubuntu-latest
+    steps:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       env:
