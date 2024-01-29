@@ -15,18 +15,9 @@ DOWNLOAD_URL = "https://github.com/Laplusdestiny/plotly_extend_wrapper"
 VERSION = plotly_extend_wrapper.__version__
 PYTHON_REQUIRES = ">=3.7"
 
-INSTALL_REQUIRES = [
-    "plotly>=5.0.0",
-    "kaleido==0.2.1",
-    "pandas>=1.1.5"
-
-]
-PACKAGES = [
-    "plotly_extend_wrapper"
-]
-CLASSIFIERS = [
-
-]
+INSTALL_REQUIRES = ["plotly>=5.0.0", "kaleido==0.2.1", "pandas>=1.1.5"]
+PACKAGES = ["plotly_extend_wrapper"]
+CLASSIFIERS = []
 
 with open("README.md", "r") as fp:
     readme = fp.read()
@@ -39,7 +30,6 @@ setup(
     maintainer=AUTHOR,
     maintainer_email=AUTHOR_EMAIL,
     description=DESCRIPTION,
-    # README=readme,
     long_description=readme,
     long_description_content_type=LONG_DESCRIPTION_CONTENT_TYPE,
     license=LICENSE,
@@ -49,5 +39,5 @@ setup(
     python_requires=PYTHON_REQUIRES,
     install_requires=INSTALL_REQUIRES,
     packages=PACKAGES,
-    classifiers=CLASSIFIERS
+    classifiers=CLASSIFIERS,
 )
