@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 from sklearn.datasets import load_iris, load_diabetes
-from plotly_extend_wrapper.wrapper import Plot_pie, Plot_sunburst, Plot_line
+from plotly_extend_wrapper.wrapper import Plot_pie, Plot_sunburst, Plot_line, Plot_bubble_chart
 from plotly import graph_objects as go
 import pandas as pd
 
@@ -20,14 +20,14 @@ def MakeTimeSeriesData():
     return data
 
 
-def test_pie():
+def test_Pie():
     data = load_iris(as_frame=True)
 
     plot = Plot_pie(data["frame"], "target")
     assert isinstance(plot, go.Figure)
 
 
-def test_sunburst():
+def test_Sunburst():
     data = load_diabetes(as_frame=True)["frame"]
     data["sex"] = data["sex"] >= 0
 
@@ -35,7 +35,7 @@ def test_sunburst():
     assert isinstance(plot, go.Figure)
 
 
-def test_line():
+def test_Line():
     data = MakeTimeSeriesData()
 
     plot = Plot_line(
@@ -50,3 +50,21 @@ def test_line():
     )
 
     assert isinstance(plot, go.Figure)
+
+
+def test_Bubble():
+    data = load_iris(as_frame=True)
+
+    bubble = Plot_bubble_chart(
+        data["frame"],
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        color="target",
+        rounded=["sepal length (cm)", "petal length (cm)"],
+        decimals=[1, 1],
+        normalize=True,
+        offset=0.01
+    )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
