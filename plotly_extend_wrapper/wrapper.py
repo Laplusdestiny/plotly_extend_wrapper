@@ -20,12 +20,7 @@ def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
         Object of pie chart
     """
     vc = data[target].value_counts().reset_index(name="count")
-    return px.pie(
-        vc,
-        names=target,
-        values="count",
-        **kwargs
-    )
+    return px.pie(vc, names=target, values="count", **kwargs)
 
 
 def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
@@ -45,18 +40,27 @@ def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
         Object of sunburst chart
     """
     vc = data.value_counts(subset=groups).reset_index(name="count")
-    return px.sunburst(
-        vc,
-        path=groups,
-        values="count",
-        **kwargs
-    )
+    return px.sunburst(vc, path=groups, values="count", **kwargs)
 
 
-class Plot_bubble_chart():
-    """Make bubble chart
-    """
-    def __init__(self, df, x, y, color=None, facet_col=None, facet_row=None, rounded=None, decimals=None, normalize=False, smoothing=False, offset=0, **kwargs):
+class Plot_bubble_chart:
+    """Make bubble chart"""
+
+    def __init__(
+        self,
+        df,
+        x,
+        y,
+        color=None,
+        facet_col=None,
+        facet_row=None,
+        rounded=None,
+        decimals=None,
+        normalize=False,
+        smoothing=False,
+        offset=0,
+        **kwargs,
+    ):
         """Initialize function
 
         Parameters
@@ -120,9 +124,15 @@ class Plot_bubble_chart():
         cols = [self.x, self.y]
         grouper = list(filter(None, [self.color, self.facet_col, self.facet_row]))
         if len(grouper) == 0:
-            vc = self.df.value_counts(subset=cols, normalize=self.normalize).reset_index(name="count")
+            vc = self.df.value_counts(
+                subset=cols, normalize=self.normalize
+            ).reset_index(name="count")
         else:
-            vc = self.df.groupby(grouper).value_counts(subset=cols, normalize=self.normalize).reset_index(name="count")
+            vc = (
+                self.df.groupby(grouper)
+                .value_counts(subset=cols, normalize=self.normalize)
+                .reset_index(name="count")
+            )
         if self.smoothing:
             vc = self._smoothing_probability(vc, grouper)
         vc["count"] = vc["count"] + self.offset
@@ -138,7 +148,9 @@ class Plot_bubble_chart():
                     elif len(self.rounded) == 2:
                         self.decimals = [self.decimals, self.decimals]
                     else:
-                        raise ValueError("Parameter rounded seems to be strange, please check the parameter")
+                        raise ValueError(
+                            "Parameter rounded seems to be strange, please check the parameter"
+                        )
 
             for col, decimal in zip(self.rounded, self.decimals):
                 df.loc[:, f"{col}_rounded"] = df.loc[:, col].round(decimals=decimal)
@@ -160,7 +172,7 @@ class Plot_bubble_chart():
             color=self.color,
             facet_col=self.facet_col,
             facet_row=self.facet_row,
-            **self.kwargs
+            **self.kwargs,
         )
 
     def __call__(self):
@@ -168,22 +180,22 @@ class Plot_bubble_chart():
 
 
 def Plot_line(
-        df: pd.DataFrame,
-        x: str,
-        y: list,
-        secondary_y: list,
-        xtitle=None,
-        ytitle=None,
-        secondary_ytitle=None,
-        save_html_path=None,
-        vspan=None,
-        vspan_color_randomize=False,
-        sort_column=True,
-        sort_x=True,
-        opacity=0.2,
-        px_kwargs=dict(),
-        **kwargs
-    ):
+    df: pd.DataFrame,
+    x: str,
+    y: list,
+    secondary_y: list,
+    xtitle=None,
+    ytitle=None,
+    secondary_ytitle=None,
+    save_html_path=None,
+    vspan=None,
+    vspan_color_randomize=False,
+    sort_column=True,
+    sort_x=True,
+    opacity=0.2,
+    px_kwargs=dict(),
+    **kwargs,
+):
     """Make line graph with secondary y using plotly.express
 
     Parameters
@@ -223,10 +235,11 @@ def Plot_line(
         Plot graph
     """
     import random
+
     random.seed(42)
 
     def pick_color():
-        return ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])][0]
+        return ["#" + "".join([random.choice("0123456789ABCDEF") for j in range(6)])][0]
 
     if isinstance(secondary_y, str):
         secondary_y = [secondary_y]
@@ -275,7 +288,7 @@ def Plot_line(
                 fillcolor=color,
                 opacity=opacity,
                 layer="below",
-                line_width=0
+                line_width=0,
             )
 
     if save_html_path is not None:
@@ -286,7 +299,9 @@ def Plot_line(
     return subfig
 
 
-def Plot_bubble_chart_with_line(bubble_plot, line_info: dict, x1, x2, xtitle=None, ytitle=None, **kwargs):
+def Plot_bubble_chart_with_line(
+    bubble_plot, line_info: dict, x1, x2, xtitle=None, ytitle=None, **kwargs
+):
     """Making bubble chart with linear plot
 
     Parameters
@@ -327,15 +342,25 @@ def Plot_bubble_chart_with_line(bubble_plot, line_info: dict, x1, x2, xtitle=Non
     for color in line_info.keys():
         a = line_info[color]["a"]
         b = line_info[color]["b"]
-        linear_df = pd.concat([linear_df, pd.Series([x1, a * x1 + b, color], index=linear_df.columns).to_frame().T])
-        linear_df = pd.concat([linear_df, pd.Series([x2, a * x2 + b, color], index=linear_df.columns).to_frame().T])
+        linear_df = pd.concat(
+            [
+                linear_df,
+                pd.Series([x1, a * x1 + b, color], index=linear_df.columns)
+                .to_frame()
+                .T,
+            ]
+        )
+        linear_df = pd.concat(
+            [
+                linear_df,
+                pd.Series([x2, a * x2 + b, color], index=linear_df.columns)
+                .to_frame()
+                .T,
+            ]
+        )
         color_dict[color] = color
     line_plot = px.line(
-        linear_df,
-        x="x",
-        y="y",
-        color="color",
-        color_discrete_map=color_dict
+        linear_df, x="x", y="y", color="color", color_discrete_map=color_dict
     )
 
     subfig = make_subplots()
