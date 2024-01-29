@@ -20,7 +20,7 @@ class Update_plotly_object:
 
     def _set_legend_position(self, position: str):
         if position is not None:
-            self.po.layout.legend.orientation = position
+            self.po.update_layout(legend={"orientation": position})
 
     def _set_height(self, height: int):
         if height is not None:
@@ -74,7 +74,7 @@ class Update_plotly_object:
         self._update_yaxis(yaxis_title)
         self._update_secondary_yaxis(secondary_yaxis_title)
         self._show_legend(legend)
-        if legend is False:
+        if legend in (None, True):
             self._set_legend_position(legend_position)
         self._set_height(height)
         self._set_width(width)
