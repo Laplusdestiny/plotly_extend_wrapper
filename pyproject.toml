@@ -6,12 +6,12 @@ authors = ["Toru Sumi <prayonshootingstars@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
-plotly = ">=5.0.0"
+python = ">=3.9"
+plotly = "^5.0.0"
 kaleido = "0.2.1"
-pandas = ">=1.1.5"
 pyarrow = "*"
 twine = "*"
+pandas = "^2.2.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
