@@ -1,7 +1,12 @@
 # encoding: utf-8
 
 from sklearn.datasets import load_iris, load_diabetes
-from plotly_extend_wrapper.wrapper import Plot_pie, Plot_sunburst, Plot_line, Plot_bubble_chart
+from plotly_extend_wrapper.wrapper import (
+    Plot_pie,
+    Plot_sunburst,
+    Plot_line,
+    Plot_bubble_chart,
+)
 from plotly import graph_objects as go
 import pandas as pd
 
@@ -16,6 +21,27 @@ def MakeTimeSeriesData():
             ["2024-01-02 00:00:00", 0, 150],
         ],
         columns=["timestamp", "y1", "y2"],
+    )
+    return data
+
+
+def MakeScattterData():
+    data = pd.DataFrame(
+        [
+            ["A", "a", 0, 10],
+            ["A", "a", 5, 20],
+            ["A", "b", 3, 8],
+            ["A", "b", 6, 16],
+            ["B", "a", -3, 4],
+            ["B", "a", -6, 2],
+            ["B", "b", -1, -1],
+            ["B", "b", -4, -6],
+            ["A", "a", 3, 15],
+            ["B", "a", -4, 1],
+            ["A", "b", 4, 14],
+            ["B", "b", -2, -2],
+        ],
+        columns=["G1", "G2", "x", "y"],
     )
     return data
 
@@ -52,6 +78,52 @@ def test_Line():
     assert isinstance(plot, go.Figure)
 
 
+def test_LinewithVspan():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y="y2",
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line2.html",
+        vspan=[
+            ("2024-01-01 00:00:00", "2024-01-01 08:00:00"),
+            ("2024-01-01 12:00:00", "2024-01-01 16:00:00"),
+            ("2024-01-01 20:00:00", "2024-01-01 23:00:00"),
+        ],
+        vspan_color_randomize=True,
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
+def test_LinewithVspan2():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y="y2",
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line2.html",
+        vspan=[
+            ("2024-01-01 00:00:00", "2024-01-01 08:00:00", "blue"),
+            ("2024-01-01 12:00:00", "2024-01-01 16:00:00", "yellow"),
+            ("2024-01-01 20:00:00", "2024-01-01 23:00:00", "green"),
+        ],
+        vspan_color_randomize=True,
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
 def test_Bubble():
     data = load_iris(as_frame=True)
 
@@ -63,8 +135,49 @@ def test_Bubble():
         rounded=["sepal length (cm)", "petal length (cm)"],
         decimals=[1, 1],
         normalize=True,
-        offset=0.01
+        offset=0.01,
     )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
+
+
+def test_Bubble_rounded():
+    data = load_iris(as_frame=True)
+
+    bubble = Plot_bubble_chart(
+        data["frame"],
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        color="target",
+        rounded=["sepal length (cm)", "petal length (cm)"],
+        decimals=1,
+    )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
+
+
+def test_Bubble_group():
+    data = MakeScattterData()
+
+    bubble = Plot_bubble_chart(
+        data,
+        x="x",
+        y="y",
+        facet_col="G1",
+        facet_row="G2",
+        smoothing=True,
+    )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
+
+
+def test_Bubble_simple():
+    data = MakeScattterData()
+
+    bubble = Plot_bubble_chart(data, x="x", y="y", smoothing=True, normalize=True)
     new_plot = bubble()
 
     assert isinstance(new_plot, go.Figure)
