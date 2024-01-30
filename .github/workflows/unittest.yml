@@ -24,7 +24,7 @@ jobs:
         poetry --version
     - name: Poetry Install Dependencies
       run: |
-        poetry install --no-interaction --no-dev
+        poetry install --no-interaction --with test
     - name: Test
       run: |
         poetry run pytest test --cov=./plotly_extend_wrapper --cov-report=xml
