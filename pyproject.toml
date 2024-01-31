@@ -27,6 +27,7 @@ ipykernel = "*"
 [tool.poetry.group.deploy.dependencies]
 setuptools = "*"
 twine = "*"
+wheel = "*"
 
 [build-system]
 requires = ["poetry-core"]
