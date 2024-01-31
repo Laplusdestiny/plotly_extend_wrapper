@@ -23,7 +23,7 @@ jobs:
         poetry --version
     - name: Poetry Install Dependencies
       run: |
-        poetry install --no-interaction --only deploy
+        poetry install --no-interaction --without dev,test
     - name: Build
       run: |
         poetry run python setup.py sdist
