@@ -10,17 +10,23 @@ python = ">=3.9"
 plotly = "^5.15.0"
 kaleido = "0.2.1"
 pyarrow = "*"
-twine = "*"
 pandas = "^2.0.0"
+
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 pytest-cov = "*"
 scikit-learn = "*"
 
+
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
 ipykernel = "*"
+
+
+[tool.poetry.group.deploy.dependencies]
+setuptools = "*"
+twine = "*"
 
 [build-system]
 requires = ["poetry-core"]
