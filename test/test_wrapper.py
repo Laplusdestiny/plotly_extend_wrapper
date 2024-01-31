@@ -6,7 +6,7 @@ from plotly_extend_wrapper.wrapper import (
     Plot_sunburst,
     Plot_line,
     Plot_bubble_chart,
-    Plot_bubble_chart_with_line
+    Plot_bubble_chart_with_line,
 )
 from plotly import graph_objects as go
 import pandas as pd
@@ -125,6 +125,7 @@ def test_LinewithVspan2():
 
     assert isinstance(plot, go.Figure)
 
+
 def test_LinewithVspan3():
     data = MakeTimeSeriesData()
 
@@ -207,11 +208,15 @@ def test_Bubble_simple():
     assert isinstance(new_plot, go.Figure)
 
 
-def test_PlotlineNotIncludeCol():
+def test_Bubble_simple2():
     data = MakeScattterData()
 
-    with pytest.raises(ValueError):
-        Plot_line(data, x="timestamp", y=["x1"], secondary_y=["x2"])
+    bubble = Plot_bubble_chart(
+        data, x="x", y="y", rounded=["x"], decimals=-1
+    )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
 
 
 def test_BubbleWithLinear():
@@ -231,16 +236,52 @@ def test_BubbleWithLinear():
 
     new_bubble = Plot_bubble_chart_with_line(
         new_plot,
-        line_info={
-            "red":{
-                "a": 0.1,
-                "b": 0.1
-            }
-        },
+        line_info={"red": {"a": 0.1, "b": 0.1}},
         x1=0,
         x2=10,
         xtitle="xaxis",
-        ytitle="yaxis"
+        ytitle="yaxis",
     )
 
     assert isinstance(new_bubble, go.Figure)
+
+
+def test_PlotlineNotIncludeCol():
+    data = MakeScattterData()
+
+    with pytest.raises(ValueError):
+        Plot_line(data, x="timestamp", y=["x1"], secondary_y=["x2"])
+
+
+def test_PlotBubbleStrangeParameter1():
+    data = load_iris(as_frame=True)
+
+    with pytest.raises(ValueError):
+        bubble = Plot_bubble_chart(
+            data["frame"],
+            x="sepal length (cm)",
+            y="petal length (cm)",
+            color="target",
+            rounded=["sepal length (cm)", "petal length (cm)", "error"],
+            decimals=1,
+            normalize=True,
+            offset=0.01,
+        )
+        bubble()
+
+
+def test_PlotBubbleStrangeParameter2():
+    data = load_iris(as_frame=True)
+
+    with pytest.raises(ValueError):
+        bubble = Plot_bubble_chart(
+            data["frame"],
+            x="sepal length (cm)",
+            y="petal length (cm)",
+            color="target",
+            rounded=["petal length (cm)", "sepal width (cm)"],
+            decimals=[1, 1],
+            normalize=True,
+            offset=0.01,
+        )
+        bubble()
