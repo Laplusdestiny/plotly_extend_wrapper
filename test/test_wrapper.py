@@ -6,9 +6,11 @@ from plotly_extend_wrapper.wrapper import (
     Plot_sunburst,
     Plot_line,
     Plot_bubble_chart,
+    Plot_bubble_chart_with_line
 )
 from plotly import graph_objects as go
 import pandas as pd
+import pytest
 
 
 def MakeTimeSeriesData():
@@ -123,6 +125,28 @@ def test_LinewithVspan2():
 
     assert isinstance(plot, go.Figure)
 
+def test_LinewithVspan3():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y="y2",
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line2.html",
+        vspan=[
+            ("2024-01-01 00:00:00", "2024-01-01 08:00:00"),
+            ("2024-01-01 12:00:00", "2024-01-01 16:00:00"),
+            ("2024-01-01 20:00:00", "2024-01-01 23:00:00"),
+        ],
+        vspan_color_randomize=False,
+    )
+
+    assert isinstance(plot, go.Figure)
+
 
 def test_Bubble():
     data = load_iris(as_frame=True)
@@ -181,3 +205,42 @@ def test_Bubble_simple():
     new_plot = bubble()
 
     assert isinstance(new_plot, go.Figure)
+
+
+def test_PlotlineNotIncludeCol():
+    data = MakeScattterData()
+
+    with pytest.raises(ValueError):
+        Plot_line(data, x="timestamp", y=["x1"], secondary_y=["x2"])
+
+
+def test_BubbleWithLinear():
+    data = load_iris(as_frame=True)
+
+    bubble = Plot_bubble_chart(
+        data["frame"],
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        color="target",
+        rounded=["sepal length (cm)", "petal length (cm)"],
+        decimals=[1, 1],
+        normalize=True,
+        offset=0.01,
+    )
+    new_plot = bubble()
+
+    new_bubble = Plot_bubble_chart_with_line(
+        new_plot,
+        line_info={
+            "red":{
+                "a": 0.1,
+                "b": 0.1
+            }
+        },
+        x1=0,
+        x2=10,
+        xtitle="xaxis",
+        ytitle="yaxis"
+    )
+
+    assert isinstance(new_bubble, go.Figure)
