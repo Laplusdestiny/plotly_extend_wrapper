@@ -12,10 +12,10 @@ You can make plot simply
 
 ## Requirement
 
-- Python >= 3.7
+- Python >= 3.9
 - Plotly >= 5.0.0
 - kaleido = 0.2.1
-- pandas >= 1.1.5
+- pandas >= 2.2.0
 
 ## Graph
 

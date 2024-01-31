@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - unit-test
 
 jobs:
   Unit-test:
@@ -12,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
     - name: Install poetry
@@ -21,10 +20,11 @@ jobs:
         echo "$HOME/.poetry/bin" >> $GITHUB_PATH
     - name: Poetry Version
       run: |
+        python -V
         poetry --version
     - name: Poetry Install Dependencies
       run: |
-        poetry install --no-interaction
+        poetry install --no-interaction --without dev
     - name: Test
       run: |
         poetry run pytest test --cov=./plotly_extend_wrapper --cov-report=xml

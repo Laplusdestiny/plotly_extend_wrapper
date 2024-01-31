@@ -96,3 +96,11 @@ def test_MarkerSize():
     new_plot = updater()
 
     CheckMarkerSize(new_plot, 50)
+
+def test_SetLegendPosition():
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    updater.update(legend_position="v")
+    new_plot = updater()
+
+    assert new_plot.layout.legend["orientation"] == "v"

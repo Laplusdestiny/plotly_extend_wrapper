@@ -7,11 +7,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-plotly = "*"
+plotly = "^5.0.0"
 kaleido = "0.2.1"
-pandas = "*"
 pyarrow = "*"
 twine = "*"
+pandas = "^2.2.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -20,6 +20,7 @@ scikit-learn = "*"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
+ipykernel = "*"
 
 [build-system]
 requires = ["poetry-core"]
