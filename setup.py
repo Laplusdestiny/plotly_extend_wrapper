@@ -13,9 +13,9 @@ URL = "https://github.com/Laplusdestiny/plotly_extend_wrapper"
 LICENSE = "MIT"
 DOWNLOAD_URL = "https://github.com/Laplusdestiny/plotly_extend_wrapper"
 VERSION = plotly_extend_wrapper.__version__
-PYTHON_REQUIRES = ">=3.7"
+PYTHON_REQUIRES = ">=3.9"
 
-INSTALL_REQUIRES = ["plotly>=5.0.0", "kaleido==0.2.1", "pandas>=1.1.5"]
+INSTALL_REQUIRES = ["plotly>=5.15.0", "kaleido==0.2.1", "pandas>=2.0.0"]
 PACKAGES = ["plotly_extend_wrapper"]
 CLASSIFIERS = []
 
