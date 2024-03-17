@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - update_build_procedure
 
 jobs:
   Unit-test:
@@ -16,8 +17,7 @@ jobs:
         python-version: '3.9'
     - name: Install poetry
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+        pipx install poetry
     - name: Poetry Version
       run: |
         python -V
