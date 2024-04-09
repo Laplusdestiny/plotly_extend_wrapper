@@ -7,6 +7,7 @@ from plotly_extend_wrapper.wrapper import (
     Plot_line,
     Plot_bubble_chart,
     Plot_bubble_chart_with_line,
+    Plot_surface
 )
 from plotly import graph_objects as go
 import pandas as pd
@@ -285,3 +286,16 @@ def test_PlotBubbleStrangeParameter2():
             offset=0.01,
         )
         bubble()
+
+
+def test_PlotSurface():
+    data = load_iris(as_frame=True)
+
+    surface = Plot_surface(
+        data,
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        z="petal height (cm)"
+        )
+
+    assert isinstance(surface, go.Figure)
