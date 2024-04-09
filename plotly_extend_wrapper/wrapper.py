@@ -2,6 +2,7 @@ from plotly import express as px
 from plotly.subplots import make_subplots
 import pandas as pd
 from plotly_extend_wrapper.common import check_directory
+from plotly import graph_objects as go
 
 
 def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
@@ -369,3 +370,34 @@ def Plot_bubble_chart_with_line(
     subfig.layout.yaxis.title = ytitle
     subfig.update_layout(**kwargs)
     return subfig
+
+
+def Plot_surface(
+    df: pd.DataFrame,
+    x: str,
+    y: str,
+    z: str,
+    title=None,
+    height=None,
+    width=None,
+    **kwargs,
+):
+    pivot_df = df.pivot(index=x, columns=y, values=z)
+
+    X = pivot_df.columns.values
+    Y = pivot_df.index.values
+    Z = pivot_df.values
+
+    data = [go.Surface(x=X, y=Y, z=Z)]
+    layout = go.Layout(
+        title=title,
+        scene=dict(
+            xaxis=dict(title=x),
+            yaxis=dict(title=y),
+            zaxis=dict(title=z),
+        ),
+        height=height,
+        width=width,
+    )
+    fig = go.Figure(data=data, layout=layout)
+    return fig
