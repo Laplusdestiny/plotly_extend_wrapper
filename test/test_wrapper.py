@@ -299,3 +299,17 @@ def test_PlotSurface():
         )
 
     assert isinstance(surface, go.Figure)
+
+
+def test_PlotSurface_with_smoothing():
+    data = load_iris(as_frame=True)
+
+    surface = Plot_surface(
+        data,
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        z="petal height (cm)",
+        smoothing=True
+        )
+
+    assert isinstance(surface, go.Figure)

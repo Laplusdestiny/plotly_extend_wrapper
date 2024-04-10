@@ -3,6 +3,8 @@ from plotly.subplots import make_subplots
 import pandas as pd
 from plotly_extend_wrapper.common import check_directory
 from plotly import graph_objects as go
+from scipy.interpolate import griddata
+import numpy as np
 
 
 def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
@@ -377,23 +379,42 @@ def Plot_surface(
     x: str,
     y: str,
     z: str,
+    fill_values=0,
+    smoothing=False,
+    smooth_point_num=100,
     title=None,
     height=None,
     width=None,
     **kwargs,
 ):
-    pivot_df = df.pivot(index=x, columns=y, values=z)
+    def smooth_df(x: np.ndarray, y: np.ndarray, z: np.ndarray, num: int):
+        xi = np.linspace(x.min(), x.max(), num)
+        yi = np.linspace(y.min(), y.max(), num)
+        xi, yi = np.meshgrid(xi, yi)
+        zi = griddata((x,y), z, (xi.ravel(), yi.ravel()), method="cubic")
+        zi = zi.reshape(xi.shape)
+        zi = np.nan_to_num(zi)
+        return xi, yi, zi
 
-    X = pivot_df.columns.values
-    Y = pivot_df.index.values
-    Z = pivot_df.values
+    if smoothing:
+        X = df[x].values
+        Y = df[y].values
+        Z = df[z].values
+        X, Y, Z = smooth_df(X, Y, Z, smooth_point_num)
+    else:
+        pivot_df = df.pivot(index=x, columns=y, values=z).fillna(fill_values)
+
+        X = pivot_df.columns.values
+        Y = pivot_df.index.values
+        Z = pivot_df.values
+
 
     data = [go.Surface(x=X, y=Y, z=Z)]
     layout = go.Layout(
         title=title,
         scene=dict(
-            xaxis=dict(title=x),
-            yaxis=dict(title=y),
+            xaxis=dict(title=y),    # need to be replaced
+            yaxis=dict(title=x),
             zaxis=dict(title=z),
         ),
         height=height,
