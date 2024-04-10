@@ -1,16 +1,28 @@
-[tool.poetry]
+[project]
 name = "plotly-extend-wrapper"
-version = "1.0.1"
-description = ""
-authors = ["Toru Sumi <prayonshootingstars@gmail.com>"]
+version = "1.1.0"
+description = "plotly-extend-wrapper: Extended Python library for Plotly"
+authors = [
+  { name="Laplusdestiny", email="laplusdestiny@laplusdestiny.com" },
+]
+
 readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+keywords = ["plotly", "graph", "easy", "laplusdestiny"]
+
+
+[project.urls]
+Issues = "https://github.com/Laplusdestiny/plotly_extend_wrapper/issues"
+Repository = "https://github.com/Laplusdestiny/plotly_extend_wrapper.git"
 
 [tool.poetry.dependencies]
-python = ">=3.9"
-plotly = "^5.15.0"
+python = ">=3.9,<4.0"
+plotly = ">=5.15.0"
 kaleido = "0.2.1"
 pyarrow = "*"
-pandas = "^2.0.0"
+pandas = ">=2.0.0"
+scipy = ">=1.12.0"
 
 
 [tool.poetry.group.test.dependencies]
@@ -22,6 +34,8 @@ scikit-learn = "*"
 [tool.poetry.group.dev.dependencies]
 ruff = "*"
 ipykernel = "*"
+pip-licenses = ">= 4.0.0"
+pip = "*"
 
 
 [tool.poetry.group.deploy.dependencies]
