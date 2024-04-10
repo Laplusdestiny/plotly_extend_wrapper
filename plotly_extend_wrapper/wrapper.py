@@ -379,7 +379,7 @@ def Plot_surface(
     x: str,
     y: str,
     z: str,
-    fill_values=0,
+    fill_value=0,
     smoothing=False,
     smooth_point_num=100,
     title=None,
@@ -402,7 +402,7 @@ def Plot_surface(
         Z = df[z].values
         X, Y, Z = smooth_df(X, Y, Z, smooth_point_num)
     else:
-        pivot_df = df.pivot(index=x, columns=y, values=z).fillna(fill_values)
+        pivot_df = pd.pivot_table(df, index=x, columns=y, values=z, fill_value=fill_value)
 
         X = pivot_df.columns.values
         Y = pivot_df.index.values

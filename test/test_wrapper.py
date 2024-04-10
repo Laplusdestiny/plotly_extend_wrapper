@@ -295,7 +295,7 @@ def test_PlotSurface():
         data["frame"],
         x="sepal length (cm)",
         y="petal length (cm)",
-        z="petal height (cm)"
+        z="petal width (cm)"
         )
 
     assert isinstance(surface, go.Figure)
@@ -308,7 +308,7 @@ def test_PlotSurface_with_smoothing():
         data["frame"],
         x="sepal length (cm)",
         y="petal length (cm)",
-        z="petal height (cm)",
+        z="petal width (cm)",
         smoothing=True
         )
 
