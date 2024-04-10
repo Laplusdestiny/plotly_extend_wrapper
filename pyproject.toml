@@ -16,6 +16,13 @@ keywords = ["plotly", "graph", "easy", "laplusdestiny"]
 Issues = "https://github.com/Laplusdestiny/plotly_extend_wrapper/issues"
 Repository = "https://github.com/Laplusdestiny/plotly_extend_wrapper.git"
 
+
+[tool.poetry]
+name = "plotly-extend-wrapper"
+version = "1.1.0"
+description = "plotly-extend-wrapper: Extended Python library for Plotly"
+authors = ["Laplusdestiny <laplusdestiny@laplusdestiny.com>"]
+
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 plotly = ">=5.15.0"

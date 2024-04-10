@@ -292,7 +292,7 @@ def test_PlotSurface():
     data = load_iris(as_frame=True)
 
     surface = Plot_surface(
-        data,
+        data["frame"],
         x="sepal length (cm)",
         y="petal length (cm)",
         z="petal height (cm)"
@@ -305,7 +305,7 @@ def test_PlotSurface_with_smoothing():
     data = load_iris(as_frame=True)
 
     surface = Plot_surface(
-        data,
+        data["frame"],
         x="sepal length (cm)",
         y="petal length (cm)",
         z="petal height (cm)",
