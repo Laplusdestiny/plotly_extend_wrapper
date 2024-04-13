@@ -10,13 +10,5 @@ Welcome to plotly-extend-wrapper's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   wrapper
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   source/introduction
+   source/wrapper

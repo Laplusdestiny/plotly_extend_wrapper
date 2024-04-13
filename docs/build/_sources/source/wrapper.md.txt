@@ -1,18 +1,20 @@
-# wrapper.py
+# wrapper
 
 ## Plot_pie
+
+> Plot_pie(data: `pd.DataFrame`, target: `str`, **kwargs)
 
 Make pie plot
 
 ### Parameters
-- data : pd.DataFrame
+- data : `pd.DataFrame`
     - pandas.DataFrame included data to make pie chart
-- target : str
+- target : `str`
     - String which column you would like to use for pie chart
 
 ### Returns
 
-plotly.graph_objects
+`plotly.graph_objects`
 
 Object of pie chart
 
