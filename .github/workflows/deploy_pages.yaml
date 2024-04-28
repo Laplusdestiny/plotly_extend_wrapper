@@ -4,15 +4,43 @@ on:
   push:
     branches: [main, documentation] # branch to trigger deployment
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  pages:
-    runs-on: ubuntu-20.04
+  deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
+    runs-on: ubuntu-latest
     steps:
-    - id: deployment
-      uses: sphinx-notes/pages@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Poetry
+        run: pipx install poetry
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "poetry"
+      - name: Install dependencies
+        run: poetry install
+      - name: Build Sphinx
+        run: |
+          poetry run sphinx-build docs/ docs/build
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: './docs/build/'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
