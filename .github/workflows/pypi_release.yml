@@ -1,8 +1,6 @@
 name: Release package to pypi
 
 on:
-  push:
-    branches: [rye] # branch to trigger deployment
   release:
     types: [created]
 
