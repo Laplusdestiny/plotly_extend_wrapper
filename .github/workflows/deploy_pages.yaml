@@ -2,45 +2,43 @@ name: Deploy Sphinx documentation to Pages
 
 on:
   push:
-    branches: [main, documentation] # branch to trigger deployment
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches: [main, rye] # branch to trigger deployment
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Poetry
-        run: pipx install poetry
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Install a specific version
+        uses: eifinger/setup-rye@v3
         with:
-          python-version: "3.11"
-          cache: "poetry"
+          version: 'latest'
       - name: Install dependencies
-        run: poetry install
+        run: rye sync
       - name: Build Sphinx
-        run: |
-          poetry run sphinx-build docs/ docs/build
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+        run: rye run sphinx-build docs/ docs/_build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # - name: Setup Pages
+      #   uses: actions/configure-pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: './docs/build/'
+          path: 'docs/_build'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
