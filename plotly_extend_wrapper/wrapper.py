@@ -2,6 +2,9 @@ from plotly import express as px
 from plotly.subplots import make_subplots
 import pandas as pd
 from plotly_extend_wrapper.common import check_directory
+from plotly import graph_objects as go
+from scipy.interpolate import griddata
+import numpy as np
 
 
 def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
@@ -369,3 +372,53 @@ def Plot_bubble_chart_with_line(
     subfig.layout.yaxis.title = ytitle
     subfig.update_layout(**kwargs)
     return subfig
+
+
+def Plot_surface(
+    df: pd.DataFrame,
+    x: str,
+    y: str,
+    z: str,
+    fill_value=0,
+    smoothing=False,
+    smooth_point_num=100,
+    title=None,
+    height=None,
+    width=None,
+    **kwargs,
+):
+    def smooth_df(x: np.ndarray, y: np.ndarray, z: np.ndarray, num: int):
+        xi = np.linspace(x.min(), x.max(), num)
+        yi = np.linspace(y.min(), y.max(), num)
+        xi, yi = np.meshgrid(xi, yi)
+        zi = griddata((x,y), z, (xi.ravel(), yi.ravel()), method="cubic")
+        zi = zi.reshape(xi.shape)
+        zi = np.nan_to_num(zi)
+        return xi, yi, zi
+
+    if smoothing:
+        X = df[x].values
+        Y = df[y].values
+        Z = df[z].values
+        X, Y, Z = smooth_df(X, Y, Z, smooth_point_num)
+    else:
+        pivot_df = pd.pivot_table(df, index=x, columns=y, values=z, fill_value=fill_value)
+
+        X = pivot_df.columns.values
+        Y = pivot_df.index.values
+        Z = pivot_df.values
+
+
+    data = [go.Surface(x=X, y=Y, z=Z)]
+    layout = go.Layout(
+        title=title,
+        scene=dict(
+            xaxis=dict(title=y),    # need to be replaced
+            yaxis=dict(title=x),
+            zaxis=dict(title=z),
+        ),
+        height=height,
+        width=width,
+    )
+    fig = go.Figure(data=data, layout=layout)
+    return fig
