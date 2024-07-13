@@ -2,7 +2,7 @@ name: Unit test
 
 on:
   push:
-    branches: [main, rye]
+    branches: [main]
 
 jobs:
   Unit-test:

@@ -18,8 +18,7 @@ jobs:
     - name: Install dependencies
       run: rye sync
     - name: Build
-      run: |
-        poetry run python -m build
+      run: rye build
     - name: Publish a Python distribution to PyPI
       if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
       uses: pypa/gh-action-pypi-publish@release/v1.8

@@ -29,15 +29,14 @@ jobs:
       - name: Install dependencies
         run: rye sync
       - name: Build Sphinx
-        run: |
-          rye run sphinx-build docs/ docs/build
+        run: rye run sphinx-build docs/ docs/_build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: './docs/build/'
+          path: './docs/_build/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
