@@ -9,6 +9,7 @@
 project = 'plotly-extend-wrapper'
 copyright = '2024, Laplusdestiny'
 author = 'Laplusdestiny'
+version = "1.1.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -16,7 +17,7 @@ author = 'Laplusdestiny'
 extensions = ['myst_parser', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 
 templates_path = ['_templates']
-exclude_patterns = []
+# exclude_patterns = []
 source_suffix = {
     '.rst': 'restructuredtext',
     '.txt': 'markdown',
@@ -27,4 +28,4 @@ source_suffix = {
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'furo'
-html_static_path = ['_static']
+# html_static_path = ['_static']
