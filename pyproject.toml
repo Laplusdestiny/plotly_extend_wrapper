@@ -51,6 +51,12 @@ twine = "*"
 wheel = "*"
 build = "*"
 
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "*"
+myst-parser = "*"
+furo = "*"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
