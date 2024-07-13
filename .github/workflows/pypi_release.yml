@@ -1,6 +1,8 @@
 name: Release package to pypi
 
 on:
+  push:
+    branches: [rye] # branch to trigger deployment
   release:
     types: [created]
 
@@ -9,20 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - name: Install a specific version
+      uses: eifinger/setup-rye@v3
       with:
-        python-version: '3.9'
-    - name: Install poetry
-      run: |
-        pipx install poetry
-    - name: Poetry Version
-      run: |
-        python -V
-        poetry --version
-    - name: Poetry Install Dependencies
-      run: |
-        poetry install --no-interaction --without dev,test
+        version: 'latest'
+    - name: Install dependencies
+      run: rye sync
     - name: Build
       run: |
         poetry run python -m build

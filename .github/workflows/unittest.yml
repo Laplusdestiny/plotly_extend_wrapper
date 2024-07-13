@@ -2,32 +2,22 @@ name: Unit test
 
 on:
   push:
-    branches:
-      - main
-      - surface
+    branches: [main, rye]
 
 jobs:
   Unit-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - name: Install a specific version
+      uses: eifinger/setup-rye@v3
       with:
-        python-version: '3.9'
-    - name: Install poetry
-      run: |
-        pipx install poetry
-    - name: Poetry Version
-      run: |
-        python -V
-        poetry --version
-    - name: Poetry Install Dependencies
-      run: |
-        poetry install --no-interaction --without dev,deploy
+        version: 'latest'
+    - name: Install dependencies
+      run: rye sync
     - name: Test
       run: |
-        poetry run pytest test --cov=./plotly_extend_wrapper --cov-report=xml
+        rye run pytest test --cov=./plotly_extend_wrapper --cov-report=xml
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4
       env:
