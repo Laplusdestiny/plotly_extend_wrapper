@@ -14,6 +14,7 @@ kaleido==0.2.1
 numpy==2.0.0
     # via pandas
     # via pyarrow
+    # via scipy
 packaging==24.1
     # via plotly
 pandas==2.2.2
@@ -26,6 +27,8 @@ python-dateutil==2.9.0.post0
     # via pandas
 pytz==2024.1
     # via pandas
+scipy==1.13.1
+    # via plotly-extend-wrapper
 six==1.16.0
     # via python-dateutil
 tenacity==8.5.0

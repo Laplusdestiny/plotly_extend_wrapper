@@ -152,6 +152,7 @@ rich==13.7.1
 ruff==0.5.1
 scikit-learn==1.5.1
 scipy==1.13.1
+    # via plotly-extend-wrapper
     # via scikit-learn
 secretstorage==3.3.3
     # via keyring
