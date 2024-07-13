@@ -2,7 +2,7 @@ name: Deploy Sphinx documentation to Pages
 
 on:
   push:
-    branches: [main, rye] # branch to trigger deployment
+    branches: [main, debug] # branch to trigger deployment
 
 concurrency:
   group: "pages"
@@ -38,7 +38,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs/_build'
+          path: './docs/_build'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
