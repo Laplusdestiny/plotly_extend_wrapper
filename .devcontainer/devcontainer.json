@@ -1,32 +1,36 @@
 {
-	"name": "poetry3-poetry-pyenv",
-	"build": {
-		"dockerfile": "Dockerfile"
+	"name": "Ubuntu",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/e-gineering/devcontainer-features/rye:1": {}
 	},
 
-	// 👇 Features to add to the Dev Container. More info: https://containers.dev/implementors/features.
-	// "features": {},
-
-	// 👇 Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	// 👇 Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": [],
 
-	// 👇 Configure tool-specific properties.
 	"customizations": {
-        "vscode": {
-            "extensions":[
-				"ms-python.python",
+		"vscode": {
+			"extensions": [
 				"njpwerner.autodocstring",
+				"ms-python.vscode-pylance",
+				"ms-python.python",
 				"charliermarsh.ruff",
+				"GitHub.codespaces",
+				"github.vscode-github-actions",
+				"esbenp.prettier-vscode"
 			]
-            }
-		},
-		"features": {
-			"ghcr.io/devcontainers-contrib/features/live-server:1": {}
 		}
+	},
 
-	// 👇 Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
