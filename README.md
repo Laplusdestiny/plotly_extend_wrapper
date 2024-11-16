@@ -10,6 +10,14 @@ Extended Python library for Plotly
 
 You can make plot simply
 
+Please check [Document page](https://laplusdestiny.github.io/plotly_extend_wrapper/) for more detail
+
+## Install
+
+```
+pip install plotly-extend-wrapper
+```
+
 ## Requirement
 
 - Python >= 3.9
@@ -32,3 +40,9 @@ You can make plot simply
 If there are some bugs, please make issue to tell me!
 
 [![GitHub issues](https://img.shields.io/github/issues/Laplusdestiny/plotly_extend_wrapper?logo=github)](https://github.com/Laplusdestiny/plotly_extend_wrapper/issues)
+
+## License
+MIT License
+
+[![GitHub](https://img.shields.io/github/license/Laplusdestiny/plotly_extend_wrapper?logo=github)](https://github.com/Laplusdestiny/plotly_extend_wrapper?tab=MIT-1-ov-file#MIT-1-ov-file)
+
