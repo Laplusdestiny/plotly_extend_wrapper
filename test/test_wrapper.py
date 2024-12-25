@@ -203,7 +203,8 @@ def test_Bubble_group():
 def test_Bubble_simple():
     data = MakeScattterData()
 
-    bubble = Plot_bubble_chart(data, x="x", y="y", smoothing=True, normalize=True)
+    bubble = Plot_bubble_chart(
+        data, x="x", y="y", smoothing=True, normalize=True)
     new_plot = bubble()
 
     assert isinstance(new_plot, go.Figure)
@@ -296,7 +297,7 @@ def test_PlotSurface():
         x="sepal length (cm)",
         y="petal length (cm)",
         z="petal width (cm)"
-        )
+    )
 
     assert isinstance(surface, go.Figure)
 
@@ -310,6 +311,6 @@ def test_PlotSurface_with_smoothing():
         y="petal length (cm)",
         z="petal width (cm)",
         smoothing=True
-        )
+    )
 
     assert isinstance(surface, go.Figure)
