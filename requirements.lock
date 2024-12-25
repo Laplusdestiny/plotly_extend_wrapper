@@ -7,31 +7,31 @@
 #   all-features: false
 #   with-sources: false
 #   generate-hashes: false
+#   universal: false
 
 -e file:.
 kaleido==0.2.1
     # via plotly-extend-wrapper
-numpy==2.0.0
+numpy==1.24.0
     # via pandas
+    # via plotly-extend-wrapper
     # via pyarrow
     # via scipy
-packaging==24.1
-    # via plotly
-pandas==2.2.2
+pandas==2.0.0
     # via plotly-extend-wrapper
-plotly==5.22.0
+plotly==5.12.0
     # via plotly-extend-wrapper
-pyarrow==16.1.0
+pyarrow==10.0.0
     # via plotly-extend-wrapper
 python-dateutil==2.9.0.post0
     # via pandas
 pytz==2024.1
     # via pandas
-scipy==1.13.1
+scipy==1.8.0
     # via plotly-extend-wrapper
 six==1.16.0
     # via python-dateutil
-tenacity==8.5.0
+tenacity==9.0.0
     # via plotly
-tzdata==2024.1
+tzdata==2024.2
     # via pandas

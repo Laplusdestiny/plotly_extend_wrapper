@@ -7,6 +7,7 @@
 #   all-features: false
 #   with-sources: false
 #   generate-hashes: false
+#   universal: false
 
 -e file:.
 alabaster==0.7.16
@@ -107,18 +108,18 @@ nest-asyncio==1.6.0
     # via ipykernel
 nh3==0.2.18
     # via readme-renderer
-numpy==2.0.0
+numpy==1.24.0
     # via pandas
+    # via plotly-extend-wrapper
     # via pyarrow
     # via scikit-learn
     # via scipy
 packaging==24.1
     # via build
     # via ipykernel
-    # via plotly
     # via pytest
     # via sphinx
-pandas==2.2.2
+pandas==2.0.0
     # via plotly-extend-wrapper
 parso==0.8.4
     # via jedi
@@ -126,9 +127,9 @@ pexpect==4.9.0
     # via ipython
 pkginfo==1.10.0
     # via twine
-platformdirs==4.2.2
+platformdirs==4.3.6
     # via jupyter-core
-plotly==5.22.0
+plotly==5.12.0
     # via plotly-extend-wrapper
 pluggy==1.5.0
     # via pytest
@@ -140,7 +141,7 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
-pyarrow==16.1.0
+pyarrow==10.0.0
     # via plotly-extend-wrapper
 pycparser==2.22
     # via cffi
@@ -179,7 +180,7 @@ rich==13.7.1
     # via twine
 ruff==0.5.1
 scikit-learn==1.5.1
-scipy==1.13.1
+scipy==1.8.0
     # via plotly-extend-wrapper
     # via scikit-learn
 secretstorage==3.3.3
@@ -211,7 +212,7 @@ sphinxcontrib-serializinghtml==1.1.10
     # via sphinx
 stack-data==0.6.3
     # via ipython
-tenacity==8.5.0
+tenacity==9.0.0
     # via plotly
 threadpoolctl==3.5.0
     # via scikit-learn
@@ -233,7 +234,7 @@ traitlets==5.14.3
 twine==5.1.1
 typing-extensions==4.12.2
     # via ipython
-tzdata==2024.1
+tzdata==2024.2
     # via pandas
 urllib3==2.2.2
     # via requests
