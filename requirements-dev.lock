@@ -14,6 +14,9 @@ alabaster==0.7.16
     # via sphinx
 asttokens==2.4.1
     # via stack-data
+attrs==24.3.0
+    # via jsonschema
+    # via referencing
 babel==2.15.0
     # via sphinx
 backports-tarfile==1.2.0
@@ -46,6 +49,8 @@ exceptiongroup==1.2.2
     # via pytest
 executing==2.0.1
     # via stack-data
+fastjsonschema==2.21.1
+    # via nbformat
 furo==2024.5.6
 idna==3.7
     # via requests
@@ -78,11 +83,16 @@ jinja2==3.1.4
     # via sphinx
 joblib==1.4.2
     # via scikit-learn
+jsonschema==4.23.0
+    # via nbformat
+jsonschema-specifications==2024.10.1
+    # via jsonschema
 jupyter-client==8.6.2
     # via ipykernel
 jupyter-core==5.7.2
     # via ipykernel
     # via jupyter-client
+    # via nbformat
 kaleido==0.2.1
     # via plotly-extend-wrapper
 keyring==25.2.1
@@ -104,6 +114,8 @@ more-itertools==10.3.0
     # via jaraco-classes
     # via jaraco-functools
 myst-parser==3.0.1
+nbformat==5.10.4
+    # via plotly-extend-wrapper
 nest-asyncio==1.6.0
     # via ipykernel
 nh3==0.2.18
@@ -168,6 +180,9 @@ pyzmq==26.0.3
     # via jupyter-client
 readme-renderer==44.0
     # via twine
+referencing==0.36.1
+    # via jsonschema
+    # via jsonschema-specifications
 requests==2.32.3
     # via requests-toolbelt
     # via sphinx
@@ -178,6 +193,9 @@ rfc3986==2.0.0
     # via twine
 rich==13.7.1
     # via twine
+rpds-py==0.22.3
+    # via jsonschema
+    # via referencing
 ruff==0.5.1
 scikit-learn==1.5.1
 scipy==1.8.0
@@ -231,9 +249,11 @@ traitlets==5.14.3
     # via jupyter-client
     # via jupyter-core
     # via matplotlib-inline
+    # via nbformat
 twine==5.1.1
 typing-extensions==4.12.2
     # via ipython
+    # via referencing
 tzdata==2024.2
     # via pandas
 urllib3==2.2.2
