@@ -5,6 +5,7 @@ from plotly_extend_wrapper.common import check_directory
 from plotly import graph_objects as go
 from scipy.interpolate import griddata
 import numpy as np
+from copy import deepcopy
 
 
 def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
@@ -112,7 +113,8 @@ class Plot_bubble_chart:
         if len(grouper) == 0:
             return vc
         else:
-            max_probs = vc.groupby(grouper)["count"].max().reset_index(name="max")
+            max_probs = vc.groupby(
+                grouper)["count"].max().reset_index(name="max")
             max_value = max_probs["max"].max()
             max_probs["ratio"] = max_value / max_probs["max"]
             smooth_dict = max_probs.set_index(grouper)["ratio"].to_dict()
@@ -125,7 +127,8 @@ class Plot_bubble_chart:
 
     def _value_counts(self):
         cols = [self.x, self.y]
-        grouper = list(filter(None, [self.color, self.facet_col, self.facet_row]))
+        grouper = list(
+            filter(None, [self.color, self.facet_col, self.facet_row]))
         if len(grouper) == 0:
             vc = self.df.value_counts(
                 subset=cols, normalize=self.normalize
@@ -156,13 +159,15 @@ class Plot_bubble_chart:
                         )
 
             for col, decimal in zip(self.rounded, self.decimals):
-                df.loc[:, f"{col}_rounded"] = df.loc[:, col].round(decimals=decimal)
+                df.loc[:, f"{col}_rounded"] = df.loc[:,
+                                                     col].round(decimals=decimal)
                 if self.x == col:
                     self.x = f"{col}_rounded"
                 elif self.y == col:
                     self.y = f"{col}_rounded"
                 else:
-                    raise ValueError(f"{col} is not indicated. Check parameters")
+                    raise ValueError(
+                        f"{col} is not indicated. Check parameters")
 
         return df
 
@@ -249,7 +254,8 @@ def Plot_line(
 
     plot_all_cols = pd.Series(y + secondary_y)
     if (~plot_all_cols.isin(df.columns)).any():
-        not_include_cols = plot_all_cols[~plot_all_cols.isin(df.columns)].tolist()
+        not_include_cols = plot_all_cols[~plot_all_cols.isin(
+            df.columns)].tolist()
         raise ValueError(f"{not_include_cols} columns are not in dataframe")
 
     y = [c for c in y if c not in secondary_y]
@@ -262,7 +268,8 @@ def Plot_line(
 
     subfig = make_subplots(specs=[[{"secondary_y": True}]])
     fig = px.line(df, x=x, y=y, **px_kwargs)
-    fig2 = px.line(df, x=x, y=secondary_y, line_dash_sequence=["dash"], **px_kwargs)
+    fig2 = px.line(df, x=x, y=secondary_y,
+                   line_dash_sequence=["dash"], **px_kwargs)
     fig2.update_traces(yaxis="y2")
 
     subfig.add_traces(fig.data + fig2.data)
@@ -367,10 +374,14 @@ def Plot_bubble_chart_with_line(
     )
 
     subfig = make_subplots()
-    subfig.add_traces(bubble_plot.data + line_plot.data)
-    subfig.layout.xaxis.title = xtitle
-    subfig.layout.yaxis.title = ytitle
-    subfig.update_layout(**kwargs)
+    for trace in bubble_plot.data + line_plot.data:
+        subfig.add_trace(trace)
+    if xtitle is not None:
+        subfig.layout.xaxis.title = xtitle
+    if ytitle is not None:
+        subfig.layout.yaxis.title = ytitle
+    original_layout = deepcopy(bubble_plot.layout)
+    subfig.update_layout(original_layout, **kwargs)
     return subfig
 
 
@@ -391,7 +402,7 @@ def Plot_surface(
         xi = np.linspace(x.min(), x.max(), num)
         yi = np.linspace(y.min(), y.max(), num)
         xi, yi = np.meshgrid(xi, yi)
-        zi = griddata((x,y), z, (xi.ravel(), yi.ravel()), method="cubic")
+        zi = griddata((x, y), z, (xi.ravel(), yi.ravel()), method="cubic")
         zi = zi.reshape(xi.shape)
         zi = np.nan_to_num(zi)
         return xi, yi, zi
@@ -402,12 +413,12 @@ def Plot_surface(
         Z = df[z].values
         X, Y, Z = smooth_df(X, Y, Z, smooth_point_num)
     else:
-        pivot_df = pd.pivot_table(df, index=x, columns=y, values=z, fill_value=fill_value)
+        pivot_df = pd.pivot_table(
+            df, index=x, columns=y, values=z, fill_value=fill_value)
 
         X = pivot_df.columns.values
         Y = pivot_df.index.values
         Z = pivot_df.values
-
 
     data = [go.Surface(x=X, y=Y, z=Z)]
     layout = go.Layout(

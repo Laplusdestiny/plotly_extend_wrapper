@@ -10,7 +10,20 @@
 #   universal: false
 
 -e file:.
+attrs==24.3.0
+    # via jsonschema
+    # via referencing
+fastjsonschema==2.21.1
+    # via nbformat
+jsonschema==4.23.0
+    # via nbformat
+jsonschema-specifications==2024.10.1
+    # via jsonschema
+jupyter-core==5.7.2
+    # via nbformat
 kaleido==0.2.1
+    # via plotly-extend-wrapper
+nbformat==5.10.4
     # via plotly-extend-wrapper
 numpy==1.24.0
     # via pandas
@@ -19,6 +32,8 @@ numpy==1.24.0
     # via scipy
 pandas==2.0.0
     # via plotly-extend-wrapper
+platformdirs==4.3.6
+    # via jupyter-core
 plotly==5.12.0
     # via plotly-extend-wrapper
 pyarrow==10.0.0
@@ -27,11 +42,22 @@ python-dateutil==2.9.0.post0
     # via pandas
 pytz==2024.1
     # via pandas
+referencing==0.36.1
+    # via jsonschema
+    # via jsonschema-specifications
+rpds-py==0.22.3
+    # via jsonschema
+    # via referencing
 scipy==1.8.0
     # via plotly-extend-wrapper
 six==1.16.0
     # via python-dateutil
 tenacity==9.0.0
     # via plotly
+traitlets==5.14.3
+    # via jupyter-core
+    # via nbformat
+typing-extensions==4.12.2
+    # via referencing
 tzdata==2024.2
     # via pandas
