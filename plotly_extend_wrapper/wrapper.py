@@ -198,6 +198,7 @@ def Plot_line(
     save_html_path=None,
     vspan=None,
     vspan_color_randomize=False,
+    vline=None,
     sort_column=True,
     sort_x=True,
     opacity=0.2,
@@ -300,6 +301,13 @@ def Plot_line(
                 layer="below",
                 line_width=0,
             )
+
+    if vline is not None:
+        if not isinstance(vline, list):
+            vline = [vline]
+
+        for v in vline:
+            subfig.add_vline(x=v)
 
     if save_html_path is not None:
         output_p = check_directory(save_html_path)

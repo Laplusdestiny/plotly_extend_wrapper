@@ -81,6 +81,42 @@ def test_Line():
     assert isinstance(plot, go.Figure)
 
 
+def test_LineVline():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y=["y2"],
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line.html",
+        vline=["2024-01-01 06:00:00"]
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
+def test_LineVlineinstr():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y=["y2"],
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line.html",
+        vline="2024-01-01 06:00:00"
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
 def test_LinewithVspan():
     data = MakeTimeSeriesData()
 
