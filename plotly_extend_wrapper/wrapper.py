@@ -198,6 +198,8 @@ def Plot_line(
     save_html_path=None,
     vspan=None,
     vspan_color_randomize=False,
+    vline=None,
+    vline_color=None,
     sort_column=True,
     sort_x=True,
     opacity=0.2,
@@ -228,6 +230,10 @@ def Plot_line(
         Tuple list for filling color in specify period , by default None
     vspan_color_randomize : bool, optional
         If True, choose random color, by default False
+    vline : list, optional
+        List of timestamp to add vertical line, by default None
+    vline_color : str, optional
+        Color of vertical line, by default None
     sort_column: boolean, optional
         If True, sort y column list
     sort_x: boolean, optional
@@ -300,6 +306,16 @@ def Plot_line(
                 layer="below",
                 line_width=0,
             )
+
+    if vline is not None:
+        if not isinstance(vline, list):
+            vline = [vline]
+
+        if vline_color is None:
+            vline_color = pick_color()
+
+        for v in vline:
+            subfig.add_vline(x=v, line_color=vline_color)
 
     if save_html_path is not None:
         output_p = check_directory(save_html_path)
