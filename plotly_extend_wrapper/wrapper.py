@@ -414,6 +414,26 @@ def Plot_surface(
     width=None,
     **kwargs,
 ):
+    """
+    Generates a 3D surface plot using Plotly.
+
+    Parameters:
+    df (pd.DataFrame): The input data frame containing the data to plot.
+    x (str): The column name for the x-axis.
+    y (str): The column name for the y-axis.
+    z (str): The column name for the z-axis.
+    fill_value (int, optional): The value to fill missing data in the pivot table. Default is 0.
+    smoothing (bool, optional): Whether to apply smoothing to the data. Default is False.
+    smooth_point_num (int, optional): The number of points to use for smoothing. Default is 100.
+    title (str, optional): The title of the plot. Default is None.
+    height (int, optional): The height of the plot. Default is None.
+    width (int, optional): The width of the plot. Default is None.
+    **kwargs: Additional keyword arguments to pass to the plot.
+
+    Returns:
+    plotly.graph_objs._figure.Figure: The generated 3D surface plot.
+    """
+
     def smooth_df(x: np.ndarray, y: np.ndarray, z: np.ndarray, num: int):
         xi = np.linspace(x.min(), x.max(), num)
         yi = np.linspace(y.min(), y.max(), num)
@@ -430,7 +450,8 @@ def Plot_surface(
         X, Y, Z = smooth_df(X, Y, Z, smooth_point_num)
     else:
         pivot_df = pd.pivot_table(
-            df, index=x, columns=y, values=z, fill_value=fill_value)
+            df, index=x, columns=y, values=z, fill_value=fill_value
+        )
 
         X = pivot_df.columns.values
         Y = pivot_df.index.values
@@ -440,7 +461,7 @@ def Plot_surface(
     layout = go.Layout(
         title=title,
         scene=dict(
-            xaxis=dict(title=y),    # need to be replaced
+            xaxis=dict(title=y),  # need to be replaced
             yaxis=dict(title=x),
             zaxis=dict(title=z),
         ),

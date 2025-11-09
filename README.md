@@ -7,7 +7,19 @@
 
 Extended Python library for Plotly
 
-You can make plot simply
+- **Simple Interface**: Create complex visualizations with just a few lines of code
+- **Pandas Integration**: Seamless integration with pandas DataFrames
+- **Multiple Plot Types**: Support for various chart types including pie charts, sunburst diagrams, and 3D surfaces
+- **Customization**: Easy plot customization through a unified interface
+- **Automatic Layout**: Smart default settings for common plot configurations
+
+For detailed documentation and examples, visit our [Documentation](https://laplusdestiny.github.io/plotly_extend_wrapper/)
+
+## Install
+
+```
+pip install plotly-extend-wrapper
+```
 
 ## Requirement
 
@@ -22,3 +34,9 @@ You can make plot simply
 If there are some bugs, please make issue to tell me!
 
 [![GitHub issues](https://img.shields.io/github/issues/Laplusdestiny/plotly_extend_wrapper?logo=github)](https://github.com/Laplusdestiny/plotly_extend_wrapper/issues)
+
+## License
+MIT License
+
+[![GitHub](https://img.shields.io/github/license/Laplusdestiny/plotly_extend_wrapper?logo=github)](https://github.com/Laplusdestiny/plotly_extend_wrapper?tab=MIT-1-ov-file#MIT-1-ov-file)
+
