@@ -5,6 +5,7 @@ from plotly_extend_wrapper.common import check_directory
 from plotly import graph_objects as go
 from scipy.interpolate import griddata
 import numpy as np
+from copy import deepcopy
 
 
 def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
@@ -112,7 +113,8 @@ class Plot_bubble_chart:
         if len(grouper) == 0:
             return vc
         else:
-            max_probs = vc.groupby(grouper)["count"].max().reset_index(name="max")
+            max_probs = vc.groupby(
+                grouper)["count"].max().reset_index(name="max")
             max_value = max_probs["max"].max()
             max_probs["ratio"] = max_value / max_probs["max"]
             smooth_dict = max_probs.set_index(grouper)["ratio"].to_dict()
@@ -125,7 +127,8 @@ class Plot_bubble_chart:
 
     def _value_counts(self):
         cols = [self.x, self.y]
-        grouper = list(filter(None, [self.color, self.facet_col, self.facet_row]))
+        grouper = list(
+            filter(None, [self.color, self.facet_col, self.facet_row]))
         if len(grouper) == 0:
             vc = self.df.value_counts(
                 subset=cols, normalize=self.normalize
@@ -156,13 +159,15 @@ class Plot_bubble_chart:
                         )
 
             for col, decimal in zip(self.rounded, self.decimals):
-                df.loc[:, f"{col}_rounded"] = df.loc[:, col].round(decimals=decimal)
+                df.loc[:, f"{col}_rounded"] = df.loc[:,
+                                                     col].round(decimals=decimal)
                 if self.x == col:
                     self.x = f"{col}_rounded"
                 elif self.y == col:
                     self.y = f"{col}_rounded"
                 else:
-                    raise ValueError(f"{col} is not indicated. Check parameters")
+                    raise ValueError(
+                        f"{col} is not indicated. Check parameters")
 
         return df
 
@@ -193,6 +198,8 @@ def Plot_line(
     save_html_path=None,
     vspan=None,
     vspan_color_randomize=False,
+    vline=None,
+    vline_color=None,
     sort_column=True,
     sort_x=True,
     opacity=0.2,
@@ -223,6 +230,10 @@ def Plot_line(
         Tuple list for filling color in specify period , by default None
     vspan_color_randomize : bool, optional
         If True, choose random color, by default False
+    vline : list, optional
+        List of timestamp to add vertical line, by default None
+    vline_color : str, optional
+        Color of vertical line, by default None
     sort_column: boolean, optional
         If True, sort y column list
     sort_x: boolean, optional
@@ -249,7 +260,8 @@ def Plot_line(
 
     plot_all_cols = pd.Series(y + secondary_y)
     if (~plot_all_cols.isin(df.columns)).any():
-        not_include_cols = plot_all_cols[~plot_all_cols.isin(df.columns)].tolist()
+        not_include_cols = plot_all_cols[~plot_all_cols.isin(
+            df.columns)].tolist()
         raise ValueError(f"{not_include_cols} columns are not in dataframe")
 
     y = [c for c in y if c not in secondary_y]
@@ -262,7 +274,8 @@ def Plot_line(
 
     subfig = make_subplots(specs=[[{"secondary_y": True}]])
     fig = px.line(df, x=x, y=y, **px_kwargs)
-    fig2 = px.line(df, x=x, y=secondary_y, line_dash_sequence=["dash"], **px_kwargs)
+    fig2 = px.line(df, x=x, y=secondary_y,
+                   line_dash_sequence=["dash"], **px_kwargs)
     fig2.update_traces(yaxis="y2")
 
     subfig.add_traces(fig.data + fig2.data)
@@ -293,6 +306,16 @@ def Plot_line(
                 layer="below",
                 line_width=0,
             )
+
+    if vline is not None:
+        if not isinstance(vline, list):
+            vline = [vline]
+
+        if vline_color is None:
+            vline_color = pick_color()
+
+        for v in vline:
+            subfig.add_vline(x=v, line_color=vline_color)
 
     if save_html_path is not None:
         output_p = check_directory(save_html_path)
@@ -367,10 +390,14 @@ def Plot_bubble_chart_with_line(
     )
 
     subfig = make_subplots()
-    subfig.add_traces(bubble_plot.data + line_plot.data)
-    subfig.layout.xaxis.title = xtitle
-    subfig.layout.yaxis.title = ytitle
-    subfig.update_layout(**kwargs)
+    for trace in bubble_plot.data + line_plot.data:
+        subfig.add_trace(trace)
+    if xtitle is not None:
+        subfig.layout.xaxis.title = xtitle
+    if ytitle is not None:
+        subfig.layout.yaxis.title = ytitle
+    original_layout = deepcopy(bubble_plot.layout)
+    subfig.update_layout(original_layout, **kwargs)
     return subfig
 
 

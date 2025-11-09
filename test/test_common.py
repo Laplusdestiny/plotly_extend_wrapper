@@ -1,15 +1,25 @@
 # encoding: utf-8
 
-from plotly_extend_wrapper import common
-import pytest
-from pathlib import Path
+from plotly_extend_wrapper.common import check_directory
 
 
-@pytest.mark.parametrize("path", ["./test_dir/test.png", "./test_dir_only"])
-def testCheckDirectory(path):
-    checked_path = common.check_directory(path)
+def test_create_directory(tmp_path):
+    test_path = tmp_path / "test_dir/test_file.txt"
+    result = check_directory(test_path)
+    assert (tmp_path / "test_dir").is_dir()
+    assert result == test_path.resolve()
 
-    if checked_path.suffix == "":
-        assert isinstance(checked_path, Path) and checked_path.is_dir()
-    else:
-        assert isinstance(checked_path, Path) and checked_path.parent.is_dir()
+
+def test_existing_directory(tmp_path):
+    test_path = tmp_path / "existing_dir/test_file.txt"
+    (tmp_path / "existing_dir").mkdir(parents=True, exist_ok=True)
+    result = check_directory(test_path)
+    assert (tmp_path / "existing_dir").is_dir()
+    assert result == test_path.resolve()
+
+
+def test_directory_path(tmp_path):
+    test_path = tmp_path / "new_dir"
+    result = check_directory(test_path)
+    assert test_path.is_dir()
+    assert result == test_path.resolve()

@@ -1,0 +1,10 @@
+{
+    "python.testing.pytestArgs": [
+        "-s",
+        "-v",
+        "--cov-report=xml",
+        "--cov=plotly_extend_wrapper"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

@@ -81,6 +81,42 @@ def test_Line():
     assert isinstance(plot, go.Figure)
 
 
+def test_LineVline():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y=["y2"],
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line.html",
+        vline=["2024-01-01 06:00:00"]
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
+def test_LineVlineinstr():
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y=["y2"],
+        xtitle="timestamp",
+        ytitle="value",
+        secondary_ytitle="value2",
+        save_html_path="line.html",
+        vline="2024-01-01 06:00:00"
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
 def test_LinewithVspan():
     data = MakeTimeSeriesData()
 
@@ -203,7 +239,8 @@ def test_Bubble_group():
 def test_Bubble_simple():
     data = MakeScattterData()
 
-    bubble = Plot_bubble_chart(data, x="x", y="y", smoothing=True, normalize=True)
+    bubble = Plot_bubble_chart(
+        data, x="x", y="y", smoothing=True, normalize=True)
     new_plot = bubble()
 
     assert isinstance(new_plot, go.Figure)
@@ -296,7 +333,7 @@ def test_PlotSurface():
         x="sepal length (cm)",
         y="petal length (cm)",
         z="petal width (cm)"
-        )
+    )
 
     assert isinstance(surface, go.Figure)
 
@@ -310,6 +347,6 @@ def test_PlotSurface_with_smoothing():
         y="petal length (cm)",
         z="petal width (cm)",
         smoothing=True
-        )
+    )
 
     assert isinstance(surface, go.Figure)
