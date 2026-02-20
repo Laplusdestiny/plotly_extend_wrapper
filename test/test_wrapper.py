@@ -13,6 +13,14 @@ from plotly import graph_objects as go
 import pandas as pd
 import pytest
 
+# Check if polars is available
+try:
+    import polars as pl
+    POLARS_AVAILABLE = True
+except ImportError:
+    POLARS_AVAILABLE = False
+    pl = None
+
 
 def MakeTimeSeriesData():
     data = pd.DataFrame(
@@ -45,6 +53,20 @@ def MakeScattterData():
             ["B", "b", -2, -2],
         ],
         columns=["G1", "G2", "x", "y"],
+    )
+    return data
+
+
+def MakeScattterDataPolars():
+    if not POLARS_AVAILABLE:
+        return MakeScattterData()
+    data = pl.DataFrame(
+        {
+            "G1": ["A", "A", "A", "A", "B", "B", "B", "B", "A", "B", "A", "B"],
+            "G2": ["a", "a", "b", "b", "a", "a", "b", "b", "a", "a", "b", "b"],
+            "x": [0, 5, 3, 6, -3, -6, -1, -4, 3, -4, 4, -2],
+            "y": [10, 20, 8, 16, 4, 2, -1, -6, 15, 1, 14, -2],
+        }
     )
     return data
 
@@ -410,7 +432,7 @@ def test_Line_with_save_html():
 
 def test_Bubble_with_color():
     """Test bubble chart with color parameter"""
-    data = MakeScattterDataPolars() if hasattr(MakeScattterData, '__module__') else MakeScattterData()
+    data = MakeScattterDataPolars()
 
     bubble = Plot_bubble_chart(
         data,
