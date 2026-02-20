@@ -13,6 +13,14 @@ from plotly import graph_objects as go
 import pandas as pd
 import pytest
 
+# Check if polars is available
+try:
+    import polars as pl
+    POLARS_AVAILABLE = True
+except ImportError:
+    POLARS_AVAILABLE = False
+    pl = None
+
 
 def MakeTimeSeriesData():
     data = pd.DataFrame(
@@ -45,6 +53,20 @@ def MakeScattterData():
             ["B", "b", -2, -2],
         ],
         columns=["G1", "G2", "x", "y"],
+    )
+    return data
+
+
+def MakeScattterDataPolars():
+    if not POLARS_AVAILABLE:
+        return MakeScattterData()
+    data = pl.DataFrame(
+        {
+            "G1": ["A", "A", "A", "A", "B", "B", "B", "B", "A", "B", "A", "B"],
+            "G2": ["a", "a", "b", "b", "a", "a", "b", "b", "a", "a", "b", "b"],
+            "x": [0, 5, 3, 6, -3, -6, -1, -4, 3, -4, 4, -2],
+            "y": [10, 20, 8, 16, 4, 2, -1, -6, 15, 1, 14, -2],
+        }
     )
     return data
 
@@ -350,3 +372,109 @@ def test_PlotSurface_with_smoothing():
     )
 
     assert isinstance(surface, go.Figure)
+
+
+def test_PlotSurface_with_all_options():
+    data = load_iris(as_frame=True)
+
+    surface = Plot_surface(
+        data["frame"],
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        z="petal width (cm)",
+        fill_value=1,
+        smoothing=False,
+        smooth_point_num=50,
+        title="Test Surface",
+        height=800,
+        width=1000
+    )
+
+    assert isinstance(surface, go.Figure)
+    assert surface.layout.title.text == "Test Surface"
+    assert surface.layout.height == 800
+    assert surface.layout.width == 1000
+
+
+def test_Line_with_sort_options():
+    """Test line plot with different sorting options"""
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y=["y2"],
+        sort_column=False,
+        sort_x=False,
+    )
+
+    assert isinstance(plot, go.Figure)
+
+
+def test_Line_with_save_html():
+    """Test line plot with HTML save"""
+    data = MakeTimeSeriesData()
+
+    plot = Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y=["y2"],
+        save_html_path="test_output.html",
+    )
+
+    assert isinstance(plot, go.Figure)
+    # Check if file was created
+    from pathlib import Path
+    assert Path("test_output.html").exists()
+
+
+def test_Bubble_with_color():
+    """Test bubble chart with color parameter"""
+    data = MakeScattterDataPolars()
+
+    bubble = Plot_bubble_chart(
+        data,
+        x="x",
+        y="y",
+        color="G1",
+        normalize=False,
+        smoothing=False,
+    )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
+
+
+def test_Bubble_with_single_rounded():
+    """Test bubble chart with single rounded column"""
+    data = load_iris(as_frame=True)
+
+    bubble = Plot_bubble_chart(
+        data["frame"],
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        rounded=["sepal length (cm)"],
+        decimals=0,
+    )
+    new_plot = bubble()
+
+    assert isinstance(new_plot, go.Figure)
+
+
+def test_Pie_with_kwargs():
+    """Test pie chart with additional kwargs"""
+    data = load_iris(as_frame=True)
+
+    plot = Plot_pie(data["frame"], "target", hole=0.3)
+    assert isinstance(plot, go.Figure)
+
+
+def test_Sunburst_with_kwargs():
+    """Test sunburst with additional kwargs"""
+    data = load_diabetes(as_frame=True)["frame"]
+    data["sex"] = data["sex"] >= 0
+
+    plot = Plot_sunburst(data, ["target", "sex"], maxdepth=2)
+    assert isinstance(plot, go.Figure)

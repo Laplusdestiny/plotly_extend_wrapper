@@ -17,7 +17,7 @@ For detailed documentation and examples, visit our [Documentation](https://laplu
 
 ## Install
 
-```
+``` bash
 pip install plotly-extend-wrapper
 ```
 
@@ -36,7 +36,7 @@ If there are some bugs, please make issue to tell me!
 [![GitHub issues](https://img.shields.io/github/issues/Laplusdestiny/plotly_extend_wrapper?logo=github)](https://github.com/Laplusdestiny/plotly_extend_wrapper/issues)
 
 ## License
+
 MIT License
 
 [![GitHub](https://img.shields.io/github/license/Laplusdestiny/plotly_extend_wrapper?logo=github)](https://github.com/Laplusdestiny/plotly_extend_wrapper?tab=MIT-1-ov-file#MIT-1-ov-file)
-
