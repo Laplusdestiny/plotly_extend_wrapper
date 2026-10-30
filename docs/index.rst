@@ -12,6 +12,8 @@ Welcome to plotly-extend-wrapper's documentation!
 
    source/introduction
    source/wrapper
+   source/updater
+   source/common
 
 
 =========
@@ -32,9 +34,6 @@ Welcome to plotly-extend-wrapper's documentation!
    :alt: PyPI - Version
    :target: https://pypi.org/project/plotly-extend-wrapper/
 
-Certainly! Here's an introduction for the top page of the Plotly-Extend-Wrapper
-library:
-
 Plotly-Extend-Wrapper: Extended Plotly for Interactive Graphs
 -------------------------------------------------------------
 
@@ -44,6 +43,7 @@ Overview: Plotly-Extend-Wrapper is a Python library that extends the capabilitie
 Key Features:
 -------------
 
-1. Seamless Integration with Plotly: Plotly-Extend-Wrapper seamlessly integrates with Plotly, allowing users to leverage the existing functionality while enhancing it with additional features.Users can continue using familiar Plotly syntax and methods, but with added capabilities.
-2. Advanced Methods for Common Tasks: Plotly-Extend-Wrapper provides convenient methods for tasks that are commonly required but not directly available in the standard Plotly library.Users can easily perform complex operations without having to write custom code.
-3. Automated Data Preprocessing: Some graph types require specific data formats or preprocessing steps before visualization.Plotly-Extend-Wrapper automatically handles data preprocessing for certain graph types, making it easier for users to create meaningful visualizations without manual data manipulation.
+1. Seamless Integration with Plotly: Every function returns a standard ``plotly.graph_objects.Figure``, so you can keep using familiar Plotly methods such as ``update_layout`` or ``write_html``.
+2. Advanced Methods for Common Tasks: Line charts with a secondary y-axis, highlighted periods and vertical lines, bubble charts with trend lines, and smoothed 3D surfaces can be created with a single function call.
+3. Automated Data Preprocessing: Value counting, rounding and pivoting required by certain graph types are handled automatically.
+4. pandas and polars Support: ``pandas.DataFrame``, ``polars.DataFrame`` and ``polars.LazyFrame`` are accepted as input (polars is an optional dependency).
