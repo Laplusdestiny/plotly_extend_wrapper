@@ -396,6 +396,44 @@ def test_PlotSurface_with_all_options():
     assert surface.layout.width == 1000
 
 
+def test_PlotSurface_with_kwargs():
+    data = load_iris(as_frame=True)
+
+    surface = Plot_surface(
+        data["frame"],
+        x="sepal length (cm)",
+        y="petal length (cm)",
+        z="petal width (cm)",
+        colorscale="Viridis",
+        showscale=False,
+    )
+
+    assert isinstance(surface, go.Figure)
+    assert surface.data[0].showscale is False
+    assert surface.data[0].colorscale[0][1] == "#440154"
+
+
+def test_Line_does_not_change_global_random_state():
+    import random
+
+    data = MakeTimeSeriesData()
+    random.seed(0)
+    expected = random.random()
+
+    random.seed(0)
+    Plot_line(
+        data,
+        x="timestamp",
+        y=["y1"],
+        secondary_y="y2",
+        vspan=[("2024-01-01 00:00:00", "2024-01-01 08:00:00")],
+        vspan_color_randomize=True,
+        vline=["2024-01-01 06:00:00"],
+    )
+
+    assert random.random() == expected
+
+
 def test_Line_with_sort_options():
     """Test line plot with different sorting options"""
     data = MakeTimeSeriesData()
