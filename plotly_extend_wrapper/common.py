@@ -1,4 +1,5 @@
 from pathlib import Path
+from plotly.io import get_chrome
 
 
 def check_directory(file_path):

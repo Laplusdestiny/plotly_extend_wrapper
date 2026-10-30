@@ -104,3 +104,54 @@ def test_SetLegendPosition():
     new_plot = updater()
 
     assert new_plot.layout.legend["orientation"] == "v"
+
+
+def test_GetPlot():
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    result = updater.get_plot()
+
+    assert result is updater.po
+
+
+def test_UpdateWithLegendFalse():
+    """Test that legend_position is not applied when legend is False"""
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    updater.update(legend=False, legend_position="h")
+    new_plot = updater()
+
+    # Should apply legend=False but not legend_position
+    assert new_plot.layout.showlegend == False
+
+
+def test_UpdateWithLegendTrue():
+    """Test that legend_position is applied when legend is True"""
+    plot = MakeTimeSeriesData()
+    updater = Update_plotly_object(plot)
+    updater.update(legend=True, legend_position="h")
+    new_plot = updater()
+
+    assert new_plot.layout.showlegend == True
+    assert new_plot.layout.legend["orientation"] == "h"
+
+
+def test_UpdateNoneValues():
+    """Test that None values don't update anything"""
+    plot = MakeTimeSeriesData()
+    original_height = plot.layout.height
+    original_width = plot.layout.width
+
+    updater = Update_plotly_object(plot)
+    updater.update(
+        xaxis_title=None,
+        yaxis_title=None,
+        height=None,
+        width=None,
+        marker_size=None,
+    )
+    new_plot = updater()
+
+    # Layout should remain unchanged for None values
+    assert new_plot.layout.height == original_height
+    assert new_plot.layout.width == original_width

@@ -6,15 +6,52 @@ from plotly import graph_objects as go
 from scipy.interpolate import griddata
 import numpy as np
 from copy import deepcopy
+from typing import Union
+
+# Optional polars support
+try:
+    import polars as pl
+    POLARS_AVAILABLE = True
+except ImportError:
+    POLARS_AVAILABLE = False
+    pl = None
 
 
-def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
+def _normalize_dataframe(data) -> pd.DataFrame:
+    """
+    Convert various DataFrame formats to pandas.DataFrame.
+
+    Supports pandas.DataFrame, polars.DataFrame, and polars.LazyFrame.
+
+    Parameters
+    ----------
+    data : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
+        Input data frame
+
+    Returns
+    -------
+    pd.DataFrame
+        Normalized pandas DataFrame
+    """
+    if POLARS_AVAILABLE and pl is not None:
+        if isinstance(data, pl.LazyFrame):
+            return data.collect().to_pandas()
+        elif isinstance(data, pl.DataFrame):
+            return data.to_pandas()
+
+    if isinstance(data, pd.DataFrame):
+        return data
+
+    raise TypeError(f"Unsupported data type: {type(data)}. Expected pandas.DataFrame, polars.DataFrame, or polars.LazyFrame.")
+
+
+def Plot_pie(data: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"], target: str, **kwargs):
     """Make pie plot
 
     Parameters
     ----------
-    data : pd.DataFrame
-        pandas.DataFrame included data to make pie chart
+    data : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
+        DataFrame included data to make pie chart
     target : str
         String which column you would like to use for pie chart
 
@@ -23,17 +60,18 @@ def Plot_pie(data: pd.DataFrame, target: str, **kwargs):
     plotly.graph_objects
         Object of pie chart
     """
+    data = _normalize_dataframe(data)
     vc = data[target].value_counts().reset_index(name="count")
     return px.pie(vc, names=target, values="count", **kwargs)
 
 
-def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
+def Plot_sunburst(data: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"], groups: list, **kwargs):
     """Make sunburst plot
 
     Parameters
     ----------
-    data : pd.DataFrame
-        pandas.DataFrame included data to make sunburst chart
+    data : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
+        DataFrame included data to make sunburst chart
     groups : list
         Strings list of group
         Changed when you replace the order
@@ -43,6 +81,7 @@ def Plot_sunburst(data: pd.DataFrame, groups: list, **kwargs):
     plotly.graph_objects
         Object of sunburst chart
     """
+    data = _normalize_dataframe(data)
     vc = data.value_counts(subset=groups).reset_index(name="count")
     return px.sunburst(vc, path=groups, values="count", **kwargs)
 
@@ -69,8 +108,8 @@ class Plot_bubble_chart:
 
         Parameters
         ----------
-        df : pandas.DataFrame
-            pandas.DataFrame included data to make plot
+        df : pandas.DataFrame, pl.DataFrame, or pl.LazyFrame
+            DataFrame included data to make plot
         x : str
             X-axis column's name
         y : str
@@ -92,6 +131,7 @@ class Plot_bubble_chart:
         offset : int, optional
             Offset value for bubble size, by default 0
         """
+        df = _normalize_dataframe(df)
         self.df = df.copy()
         self.x = x
         self.y = y
@@ -188,7 +228,7 @@ class Plot_bubble_chart:
 
 
 def Plot_line(
-    df: pd.DataFrame,
+    df: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"],
     x: str,
     y: list,
     secondary_y: list,
@@ -210,7 +250,7 @@ def Plot_line(
 
     Parameters
     ----------
-    df : pd.DataFrame
+    df : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
         Original dataframe
     x : str
         X-axis column name
@@ -251,6 +291,8 @@ def Plot_line(
     import random
 
     random.seed(42)
+
+    df = _normalize_dataframe(df)
 
     def pick_color():
         return ["#" + "".join([random.choice("0123456789ABCDEF") for j in range(6)])][0]
@@ -402,7 +444,7 @@ def Plot_bubble_chart_with_line(
 
 
 def Plot_surface(
-    df: pd.DataFrame,
+    df: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"],
     x: str,
     y: str,
     z: str,
@@ -418,7 +460,7 @@ def Plot_surface(
     Generates a 3D surface plot using Plotly.
 
     Parameters:
-    df (pd.DataFrame): The input data frame containing the data to plot.
+    df (pd.DataFrame, pl.DataFrame, or pl.LazyFrame): The input data frame containing the data to plot.
     x (str): The column name for the x-axis.
     y (str): The column name for the y-axis.
     z (str): The column name for the z-axis.
@@ -442,6 +484,8 @@ def Plot_surface(
         zi = zi.reshape(xi.shape)
         zi = np.nan_to_num(zi)
         return xi, yi, zi
+
+    df = _normalize_dataframe(df)
 
     if smoothing:
         X = df[x].values
