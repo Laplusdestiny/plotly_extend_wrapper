@@ -478,3 +478,24 @@ def test_Sunburst_with_kwargs():
 
     plot = Plot_sunburst(data, ["target", "sex"], maxdepth=2)
     assert isinstance(plot, go.Figure)
+
+
+def test_WrapperWithoutPolars(monkeypatch):
+    import importlib
+    import sys
+    from plotly_extend_wrapper import wrapper
+
+    # Simulate an environment where polars is not installed
+    monkeypatch.setitem(sys.modules, "polars", None)
+    try:
+        importlib.reload(wrapper)
+        assert wrapper.POLARS_AVAILABLE is False
+        assert wrapper.pl is None
+
+        df = pd.DataFrame({"a": [1, 2, 3]})
+        pd.testing.assert_frame_equal(wrapper._normalize_dataframe(df), df)
+        with pytest.raises(TypeError):
+            wrapper._normalize_dataframe([1, 2, 3])
+    finally:
+        monkeypatch.undo()
+        importlib.reload(wrapper)
