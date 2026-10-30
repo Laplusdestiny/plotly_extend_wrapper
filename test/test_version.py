@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+import importlib
+import importlib.metadata
 import re
 from pathlib import Path
 
@@ -11,3 +13,18 @@ def test_version_matches_pyproject():
     expected = re.search(r'^version\s*=\s*"([^"]+)"', pyproject, re.MULTILINE).group(1)
 
     assert plotly_extend_wrapper.__version__ == expected
+
+
+def test_version_without_installed_package(monkeypatch):
+    def raise_not_found(name):
+        raise importlib.metadata.PackageNotFoundError(name)
+
+    monkeypatch.setattr(importlib.metadata, "version", raise_not_found)
+    try:
+        importlib.reload(plotly_extend_wrapper)
+        assert plotly_extend_wrapper.__version__ == "unknown"
+    finally:
+        monkeypatch.undo()
+        importlib.reload(plotly_extend_wrapper)
+
+    assert plotly_extend_wrapper.__version__ != "unknown"
