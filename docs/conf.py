@@ -9,7 +9,14 @@
 project = 'plotly-extend-wrapper'
 copyright = '2024, Laplusdestiny'
 author = 'Laplusdestiny'
-version = "1.1.0"
+
+import re
+from pathlib import Path
+
+# Single source of truth for the version is pyproject.toml
+_pyproject = (Path(__file__).resolve().parent.parent / "pyproject.toml").read_text(encoding="utf-8")
+version = re.search(r'^version\s*=\s*"([^"]+)"', _pyproject, re.MULTILINE).group(1)
+release = version
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

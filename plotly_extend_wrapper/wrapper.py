@@ -290,12 +290,12 @@ def Plot_line(
     """
     import random
 
-    random.seed(42)
+    rng = random.Random(42)
 
     df = _normalize_dataframe(df)
 
     def pick_color():
-        return ["#" + "".join([random.choice("0123456789ABCDEF") for j in range(6)])][0]
+        return ["#" + "".join([rng.choice("0123456789ABCDEF") for j in range(6)])][0]
 
     if isinstance(secondary_y, str):
         secondary_y = [secondary_y]
@@ -470,7 +470,7 @@ def Plot_surface(
     title (str, optional): The title of the plot. Default is None.
     height (int, optional): The height of the plot. Default is None.
     width (int, optional): The width of the plot. Default is None.
-    **kwargs: Additional keyword arguments to pass to the plot.
+    **kwargs: Additional keyword arguments passed to plotly.graph_objects.Surface.
 
     Returns:
     plotly.graph_objs._figure.Figure: The generated 3D surface plot.
@@ -501,7 +501,7 @@ def Plot_surface(
         Y = pivot_df.index.values
         Z = pivot_df.values
 
-    data = [go.Surface(x=X, y=Y, z=Z)]
+    data = [go.Surface(x=X, y=Y, z=Z, **kwargs)]
     layout = go.Layout(
         title=title,
         scene=dict(
