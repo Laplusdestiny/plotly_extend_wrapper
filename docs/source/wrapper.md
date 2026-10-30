@@ -294,7 +294,7 @@ Generates a 3D surface plot using Plotly
 - width : `int`, optional
     - The width of the plot, by default None
 - **kwargs : dict
-    - Currently not used (reserved)
+    - Additional keyword arguments passed to `plotly.graph_objects.Surface` (e.g. `colorscale`, `showscale`)
 
 ### Returns
 
