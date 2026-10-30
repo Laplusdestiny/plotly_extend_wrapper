@@ -68,7 +68,7 @@ updater.write_image("output/line.png")
 
 ## Requirement
 
-- Python >= 3.9
+- Python >= 3.11
 - plotly >= 6.1.0
 - kaleido >= 0.2.1
 - pandas >= 2.0.0
