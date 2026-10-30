@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'plotly-extend-wrapper'
-copyright = '2024, Laplusdestiny'
+copyright = '2024-2026, Laplusdestiny'
 author = 'Laplusdestiny'
 
 import re
