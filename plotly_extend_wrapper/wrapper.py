@@ -1,3 +1,11 @@
+"""Plotting functions.
+
+Every ``data`` / ``df`` parameter accepts :class:`pandas.DataFrame`,
+``polars.DataFrame`` and ``polars.LazyFrame`` (polars support requires the
+optional ``polars`` dependency). polars objects are converted to
+:class:`pandas.DataFrame` internally; any other type raises :class:`TypeError`.
+"""
+
 from plotly import express as px
 from plotly.subplots import make_subplots
 import pandas as pd
@@ -46,19 +54,33 @@ def _normalize_dataframe(data) -> pd.DataFrame:
 
 
 def Plot_pie(data: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"], target: str, **kwargs):
-    """Make pie plot
+    """Make pie chart from the value counts of a column.
+
+    The value counts of ``target`` column are calculated automatically.
 
     Parameters
     ----------
-    data : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
-        DataFrame included data to make pie chart
+    data : pandas.DataFrame, polars.DataFrame or polars.LazyFrame
+        DataFrame included data to make pie chart.
     target : str
-        String which column you would like to use for pie chart
+        Column name used for the pie chart.
+    **kwargs
+        Additional keyword arguments passed to :func:`plotly.express.pie`.
 
     Returns
     -------
-    plotly.graph_objects
-        Object of pie chart
+    plotly.graph_objects.Figure
+        Pie chart.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import pandas as pd
+        from plotly_extend_wrapper import Plot_pie
+
+        df = pd.DataFrame({"category": ["A", "B", "A", "C", "B"]})
+        fig = Plot_pie(df, "category", title="Category ratio")
     """
     data = _normalize_dataframe(data)
     vc = data[target].value_counts().reset_index(name="count")
@@ -66,20 +88,38 @@ def Plot_pie(data: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"], target: 
 
 
 def Plot_sunburst(data: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"], groups: list, **kwargs):
-    """Make sunburst plot
+    """Make hierarchical sunburst chart from the value counts of multiple columns.
+
+    The value counts of the combination of ``groups`` columns are calculated
+    automatically.
 
     Parameters
     ----------
-    data : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
-        DataFrame included data to make sunburst chart
-    groups : list
-        Strings list of group
-        Changed when you replace the order
+    data : pandas.DataFrame, polars.DataFrame or polars.LazyFrame
+        DataFrame included data to make sunburst chart.
+    groups : list of str
+        Column names of the hierarchy, from the innermost ring to the
+        outermost ring. The chart changes when you change the order.
+    **kwargs
+        Additional keyword arguments passed to :func:`plotly.express.sunburst`.
 
     Returns
     -------
-    plotly.graph_objects
-        Object of sunburst chart
+    plotly.graph_objects.Figure
+        Sunburst chart.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import pandas as pd
+        from plotly_extend_wrapper import Plot_sunburst
+
+        df = pd.DataFrame({
+            "region": ["East", "East", "West", "West"],
+            "product": ["A", "B", "A", "A"],
+        })
+        fig = Plot_sunburst(df, ["region", "product"])
     """
     data = _normalize_dataframe(data)
     vc = data.value_counts(subset=groups).reset_index(name="count")
@@ -87,7 +127,80 @@ def Plot_sunburst(data: Union[pd.DataFrame, "pl.DataFrame", "pl.LazyFrame"], gro
 
 
 class Plot_bubble_chart:
-    """Make bubble chart"""
+    """Make bubble chart whose bubble size is the frequency of (x, y) pairs.
+
+    The frequency is counted for each ``color`` / ``facet_col`` /
+    ``facet_row`` group.
+
+    .. note::
+
+       ``Plot_bubble_chart`` is a **class**. Call the instance
+       (``bubble()``) or use the :attr:`plot` attribute to get the figure.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame, polars.DataFrame or polars.LazyFrame
+        DataFrame included data to make plot.
+    x : str
+        X-axis column name.
+    y : str
+        Y-axis column name.
+    color : str, optional
+        Column name used to colorize the bubbles, by default None.
+    facet_col : str, optional
+        Column name used to split the plot into columns, by default None.
+    facet_row : str, optional
+        Column name used to split the plot into rows, by default None.
+    rounded : list of str, optional
+        Columns to round, by default None. Only ``x`` and/or ``y`` can be
+        specified. Rounded values are stored in a ``{column}_rounded``
+        column, which is used as the axis.
+    decimals : list of int or int, optional
+        Number of decimals for each column in ``rounded``, by default None.
+        If an ``int`` is given, the same value is applied to all ``rounded``
+        columns.
+    normalize : bool, optional
+        If True, bubble size is calculated as normalized frequency,
+        by default False.
+    smoothing : bool, optional
+        If True, bubble size is scaled so that the maximum size of each group
+        becomes the same, by default False.
+    offset : int, optional
+        Offset value added to bubble size, by default 0.
+    **kwargs
+        Additional keyword arguments passed to :func:`plotly.express.scatter`.
+
+    Attributes
+    ----------
+    plot : plotly.graph_objects.Figure
+        Bubble chart.
+    vc : pandas.DataFrame
+        Aggregated data used for the plot (the ``count`` column is the
+        bubble size).
+
+    Raises
+    ------
+    ValueError
+        If a column in ``rounded`` is neither ``x`` nor ``y``, or if
+        ``decimals`` cannot be matched with ``rounded``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import pandas as pd
+        from plotly_extend_wrapper import Plot_bubble_chart
+
+        df = pd.DataFrame({
+            "x": [1.12, 1.14, 2.21, 2.25, 2.31],
+            "y": [1, 1, 2, 3, 3],
+            "group": ["a", "a", "b", "b", "a"],
+        })
+        bubble = Plot_bubble_chart(
+            df, x="x", y="y", color="group", rounded=["x"], decimals=1
+        )
+        fig = bubble()
+    """
 
     def __init__(
         self,
@@ -104,33 +217,6 @@ class Plot_bubble_chart:
         offset=0,
         **kwargs,
     ):
-        """Initialize function
-
-        Parameters
-        ----------
-        df : pandas.DataFrame, pl.DataFrame, or pl.LazyFrame
-            DataFrame included data to make plot
-        x : str
-            X-axis column's name
-        y : str
-            Y-axis column's name
-        color : str, optional
-            Column name you want colorize with data, by default None
-        facet_col : str, optional
-            Column name you want plot separeted vertically, by default None
-        facet_row : str, optional
-            Column name you want plot separeted horizontally, by default None
-        rounded : list, optional
-            Columns list which columns you want to round data, by default None
-        decimals : list, optional
-            Decimals list what level you want to round for each columns, by default None
-        normalize : bool, optional
-            If True, bubble size is calculated as normalized, by default False
-        smoothing : bool, optional
-            If True, bubble size were smoothed between each plot, by default False
-        offset : int, optional
-            Offset value for bubble size, by default 0
-        """
         df = _normalize_dataframe(df)
         self.df = df.copy()
         self.x = x
@@ -224,6 +310,13 @@ class Plot_bubble_chart:
         )
 
     def __call__(self):
+        """Return the bubble chart.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            Same object as :attr:`plot`.
+        """
         return self.plot
 
 
@@ -246,47 +339,89 @@ def Plot_line(
     px_kwargs=dict(),
     **kwargs,
 ):
-    """Make line graph with secondary y using plotly.express
+    """Make line chart with secondary y-axis using plotly.express.
+
+    Lines on the secondary y-axis are drawn as dashed lines. Highlighted
+    periods (``vspan``) and vertical lines (``vline``) can be added.
 
     Parameters
     ----------
-    df : pd.DataFrame, pl.DataFrame, or pl.LazyFrame
-        Original dataframe
+    df : pandas.DataFrame, polars.DataFrame or polars.LazyFrame
+        Original dataframe.
     x : str
-        X-axis column name
-    y : list
-        Y-axis columns name
-    secondary_y : list
-        Secondary y-axis columns name
+        X-axis column name.
+    y : list of str
+        Y-axis column names. Columns also included in ``secondary_y`` are
+        drawn only on the secondary y-axis.
+    secondary_y : list of str or str
+        Secondary y-axis column names. Pass an empty list ``[]`` if you don't
+        need the secondary y-axis.
     xtitle : str, optional
-        X-axis title, by default None
+        X-axis title, by default None.
     ytitle : str, optional
-        Y-axis title, by default None
+        Y-axis title, by default None.
     secondary_ytitle : str, optional
-        Secondary y-axis title, by default None
-    save_html_path: str or pathlib.Path
-        Path to output graph as html file
-    vspan : list, optional
-        Tuple list for filling color in specify period , by default None
+        Secondary y-axis title, by default None.
+    save_html_path : str or pathlib.Path, optional
+        Path to output the graph as an html file, by default None. Parent
+        directories are created automatically.
+    vspan : list of tuple, optional
+        Periods to fill with color, by default None. Each tuple is
+        ``(x0, x1)`` or ``(x0, x1, color)``. The default color is
+        ``#fdb913``.
     vspan_color_randomize : bool, optional
-        If True, choose random color, by default False
-    vline : list, optional
-        List of timestamp to add vertical line, by default None
+        If True, choose a random color for ``vspan`` items without color,
+        by default False.
+    vline : list or scalar, optional
+        X values (e.g. timestamps) to add vertical lines, by default None.
     vline_color : str, optional
-        Color of vertical line, by default None
-    sort_column: boolean, optional
-        If True, sort y column list
-    sort_x: boolean, optional
-        if True, sort by x column
+        Color of vertical lines, by default None (random color).
+    sort_column : bool, optional
+        If True, sort ``y`` and ``secondary_y`` column lists, by default True.
+    sort_x : bool, optional
+        If True, sort rows by ``x`` column, by default True.
     opacity : float, optional
-        Same option of plotly.express.line, by default 0.2
+        Opacity of ``vspan``, by default 0.2.
     px_kwargs : dict, optional
-        Kwargs dictionary used for original plotly.express.line object, by default dict()
+        Keyword arguments passed to :func:`plotly.express.line`,
+        by default ``dict()``.
+    **kwargs
+        Additional keyword arguments passed to ``Figure.update_layout``.
 
     Returns
     -------
-    plotly.graph_objects
-        Plot graph
+    plotly.graph_objects.Figure
+        Line chart with secondary y-axis.
+
+    Raises
+    ------
+    ValueError
+        If columns in ``y`` or ``secondary_y`` are not in the dataframe.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import pandas as pd
+        from plotly_extend_wrapper import Plot_line
+
+        df = pd.DataFrame({
+            "date": pd.date_range("2024-01-01", periods=48, freq="h"),
+            "sales": range(48),
+            "temperature": [i % 24 for i in range(48)],
+        })
+        fig = Plot_line(
+            df,
+            x="date",
+            y=["sales"],
+            secondary_y=["temperature"],
+            ytitle="Sales",
+            secondary_ytitle="Temperature",
+            vspan=[("2024-01-01 06:00", "2024-01-01 12:00", "red")],
+            vline=["2024-01-02 00:00"],
+            vline_color="black",
+            save_html_path="output/line.html",
+        )
     """
     import random
 
@@ -370,40 +505,52 @@ def Plot_line(
 def Plot_bubble_chart_with_line(
     bubble_plot, line_info: dict, x1, x2, xtitle=None, ytitle=None, **kwargs
 ):
-    """Making bubble chart with linear plot
+    """Overlay linear lines (``y = a * x + b``) on a bubble chart.
+
+    The layout of ``bubble_plot`` is kept.
 
     Parameters
     ----------
-    bubble_plot : Figure
-        Bubble chart object
+    bubble_plot : plotly.graph_objects.Figure
+        Bubble chart object (e.g. ``Plot_bubble_chart(...)()``).
     line_info : dict
-        line dictionary
-        Layer is below
-            1. color
-            2. a, b
-        example: {
-            "red": {
-                "a": 0.015,
-                "b": -4.3
-            },
-            "yellow": {
-                "a": 0.015,
-                "b": -2.5
+        Line definitions. The key is used as the line color and the value is
+        a dict with slope ``a`` and intercept ``b``::
+
+            {
+                "red": {"a": 0.015, "b": -4.3},
+                "yellow": {"a": 0.015, "b": -2.5},
             }
-        }
+
     x1 : int or float
-        start x-axis value
+        Start x-axis value of the lines.
     x2 : int or float
-        end x-axis value
-    xtitle: str
-        string of x-axis
-    ytitle: str
-        string of y-axis
+        End x-axis value of the lines.
+    xtitle : str, optional
+        X-axis title, by default None.
+    ytitle : str, optional
+        Y-axis title, by default None.
+    **kwargs
+        Additional keyword arguments passed to ``Figure.update_layout``.
 
     Returns
     -------
-    Figure
-        Combined figure
+    plotly.graph_objects.Figure
+        Combined figure of the bubble chart and the lines.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        from plotly_extend_wrapper import Plot_bubble_chart, Plot_bubble_chart_with_line
+
+        bubble = Plot_bubble_chart(df, x="x", y="y")
+        fig = Plot_bubble_chart_with_line(
+            bubble(),
+            line_info={"red": {"a": 1.0, "b": 0.0}},
+            x1=0,
+            x2=3,
+        )
     """
     linear_df = pd.DataFrame(columns=["x", "y", "color"])
     color_dict = {}
@@ -456,24 +603,61 @@ def Plot_surface(
     width=None,
     **kwargs,
 ):
-    """
-    Generates a 3D surface plot using Plotly.
+    """Generate 3D surface plot with optional cubic interpolation.
 
-    Parameters:
-    df (pd.DataFrame, pl.DataFrame, or pl.LazyFrame): The input data frame containing the data to plot.
-    x (str): The column name for the x-axis.
-    y (str): The column name for the y-axis.
-    z (str): The column name for the z-axis.
-    fill_value (int, optional): The value to fill missing data in the pivot table. Default is 0.
-    smoothing (bool, optional): Whether to apply smoothing to the data. Default is False.
-    smooth_point_num (int, optional): The number of points to use for smoothing. Default is 100.
-    title (str, optional): The title of the plot. Default is None.
-    height (int, optional): The height of the plot. Default is None.
-    width (int, optional): The width of the plot. Default is None.
-    **kwargs: Additional keyword arguments passed to plotly.graph_objects.Surface.
+    - If ``smoothing=False``, data is converted to a pivot table
+      (index: ``x``, columns: ``y``, values: ``z``). Note that the ``y``
+      column is shown on the horizontal axis of the scene and the ``x``
+      column on the depth axis.
+    - If ``smoothing=True``, data is interpolated on a
+      ``smooth_point_num`` x ``smooth_point_num`` grid by cubic interpolation
+      (:func:`scipy.interpolate.griddata`). Points outside the data range are
+      filled with 0.
 
-    Returns:
-    plotly.graph_objs._figure.Figure: The generated 3D surface plot.
+    Parameters
+    ----------
+    df : pandas.DataFrame, polars.DataFrame or polars.LazyFrame
+        The input data frame containing the data to plot.
+    x : str
+        The column name for the x-axis.
+    y : str
+        The column name for the y-axis.
+    z : str
+        The column name for the z-axis.
+    fill_value : int, optional
+        The value to fill missing data in the pivot table, by default 0.
+    smoothing : bool, optional
+        Whether to apply smoothing to the data, by default False.
+    smooth_point_num : int, optional
+        The number of points per axis used for smoothing, by default 100.
+    title : str, optional
+        The title of the plot, by default None.
+    height : int, optional
+        The height of the plot, by default None.
+    width : int, optional
+        The width of the plot, by default None.
+    **kwargs
+        Additional keyword arguments passed to
+        :class:`plotly.graph_objects.Surface` (e.g. ``colorscale``,
+        ``showscale``).
+
+    Returns
+    -------
+    plotly.graph_objects.Figure
+        3D surface plot.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import numpy as np
+        import pandas as pd
+        from plotly_extend_wrapper import Plot_surface
+
+        xs, ys = np.meshgrid(np.arange(10), np.arange(10))
+        df = pd.DataFrame({"x": xs.ravel(), "y": ys.ravel()})
+        df["z"] = np.sin(df["x"]) + np.cos(df["y"])
+        fig = Plot_surface(df, "x", "y", "z", smoothing=True, title="Surface")
     """
 
     def smooth_df(x: np.ndarray, y: np.ndarray, z: np.ndarray, num: int):

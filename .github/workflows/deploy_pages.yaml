@@ -3,6 +3,7 @@ name: Deploy Sphinx documentation to Pages
 on:
   push:
     branches: [main] # branch to trigger deployment
+  workflow_dispatch:
 
 concurrency:
   group: "pages"
@@ -12,8 +13,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pages: write
       id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -21,8 +26,8 @@ jobs:
         uses: astral-sh/setup-uv@v7
       - name: Install dependencies
         run: uv sync
-      - name: Build Sphinx
-        run: uv run sphinx-build docs/ docs/_build
+      - name: Build Sphinx (warnings are treated as errors)
+        run: uv run sphinx-build -W --keep-going -b html docs/ docs/_build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
