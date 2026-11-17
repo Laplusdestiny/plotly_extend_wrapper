@@ -29,7 +29,6 @@ extensions = [
     'myst_parser',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
-    'sphinx.ext.githubpages',  # add .nojekyll so that _static/ is served
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
 ]
