@@ -10,9 +10,9 @@ jobs:
   Unit-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Install uv
-      uses: astral-sh/setup-uv@v3
+      uses: astral-sh/setup-uv@v7
     - name: Install dependencies
       run: uv sync
     - name: Install package
@@ -21,6 +21,6 @@ jobs:
       run: |
         uv run pytest test --cov=./plotly_extend_wrapper --cov-report=xml
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v7
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
