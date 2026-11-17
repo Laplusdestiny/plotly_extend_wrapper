@@ -66,6 +66,18 @@ updater.write_image("output/line.png")
 | `Update_plotly_object` | Update layout of an existing figure and export it as an image |
 | `check_directory` | Create parent directories for an output path |
 
+## Documentation
+
+The [documentation](https://laplusdestiny.github.io/plotly_extend_wrapper/) is built with Sphinx and deployed to GitHub Pages on every push to `main`.
+Pull requests are checked by building the documentation (warnings are treated as errors).
+The API Reference is generated from the docstrings (numpy style) in the source code by `sphinx.ext.autodoc`, so update the docstrings when you change the API.
+New public functions / classes also need to be added to the overview tables in `docs/source/introduction.md` (checked by `test/test_docs.py`).
+
+``` bash
+uv sync
+uv run sphinx-build -W --keep-going -b html -d docs/_build/doctrees docs/ docs/_build/html
+```
+
 ## Requirement
 
 - Python >= 3.11
@@ -83,7 +95,7 @@ updater.write_image("output/line.png")
 ``` bash
 uv sync                                    # install dependencies
 uv run pytest test                         # run tests
-uv run sphinx-build docs/ docs/_build      # build documentation
+uv run sphinx-build -b html docs/ docs/_build/html   # build documentation
 ```
 
 ## Issue

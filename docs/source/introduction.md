@@ -17,17 +17,28 @@ The library offers various plotting functions and utilities to streamline the cr
 
 ### Plotting Functions
 
-- `Plot_pie()`: Create pie charts from the value counts of a column
-- `Plot_sunburst()`: Generate hierarchical sunburst charts from the value counts of multiple columns
-- `Plot_bubble_chart`: Create bubble charts whose bubble size is the frequency of (x, y) pairs
-- `Plot_line()`: Draw line plots with secondary y-axis, highlighted periods and vertical lines
-- `Plot_bubble_chart_with_line()`: Combine bubble charts with linear lines
-- `Plot_surface()`: Generate 3D surface plots with optional smoothing
+```{eval-rst}
+.. autosummary::
+
+   ~plotly_extend_wrapper.wrapper.Plot_pie
+   ~plotly_extend_wrapper.wrapper.Plot_sunburst
+   ~plotly_extend_wrapper.wrapper.Plot_bubble_chart
+   ~plotly_extend_wrapper.wrapper.Plot_line
+   ~plotly_extend_wrapper.wrapper.Plot_bubble_chart_with_line
+   ~plotly_extend_wrapper.wrapper.Plot_surface
+```
 
 ### Utility Functions
 
-- `Update_plotly_object`: Customize plot properties after creation and export images
-- `check_directory()`: Manage file paths and directory creation
+```{eval-rst}
+.. autosummary::
+
+   ~plotly_extend_wrapper.updater.Update_plotly_object
+   ~plotly_extend_wrapper.common.check_directory
+```
+
+All functions and classes can be imported directly from the top-level package
+(e.g. `from plotly_extend_wrapper import Plot_line`).
 
 ## Supported Data Types
 
@@ -90,4 +101,4 @@ pie_chart = Plot_pie(df, 'category')
 pie_chart = Plot_pie(df.lazy(), 'category')
 ```
 
-For detailed documentation on each function and its parameters, please refer to the respective sections in this documentation.
+For detailed documentation on each function and its parameters, please refer to the API Reference. The API Reference is generated from the docstrings in the source code.

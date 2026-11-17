@@ -11,6 +11,11 @@ Welcome to plotly-extend-wrapper's documentation!
    :caption: Contents:
 
    source/introduction
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference:
+
    source/wrapper
    source/updater
    source/common
