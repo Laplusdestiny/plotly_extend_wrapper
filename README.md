@@ -69,12 +69,14 @@ updater.write_image("output/line.png")
 ## Documentation
 
 The [documentation](https://laplusdestiny.github.io/plotly_extend_wrapper/) is built with Sphinx and deployed to GitHub Pages on every push to `main`.
+For each pull request, a preview is deployed to `https://laplusdestiny.github.io/plotly_extend_wrapper/pr-preview/pr-<number>/` and its URL is commented on the pull request (removed when the pull request is closed).
+Both are served from the `gh-pages` branch.
 The API Reference is generated from the docstrings (numpy style) in the source code by `sphinx.ext.autodoc`, so update the docstrings when you change the API.
 New public functions / classes also need to be added to the overview tables in `docs/source/introduction.md` (checked by `test/test_docs.py`).
 
 ``` bash
 uv sync
-uv run sphinx-build -W --keep-going -b html docs/ docs/_build
+uv run sphinx-build -W --keep-going -b html -d docs/_build/doctrees docs/ docs/_build/html
 ```
 
 ## Requirement
@@ -94,7 +96,7 @@ uv run sphinx-build -W --keep-going -b html docs/ docs/_build
 ``` bash
 uv sync                                    # install dependencies
 uv run pytest test                         # run tests
-uv run sphinx-build docs/ docs/_build      # build documentation
+uv run sphinx-build -b html docs/ docs/_build/html   # build documentation
 ```
 
 ## Issue
